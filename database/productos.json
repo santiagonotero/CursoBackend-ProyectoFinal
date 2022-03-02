@@ -1,0 +1,12 @@
+[
+  {
+    "id": 1,
+    "timestamp": 1646247679601,
+    "nombre": "XBox6r6dyjftk utfjdyjktekut",
+    "descripcion": "Una consola",
+    "codigo": "XXSA",
+    "foto": "http://localhost",
+    "precio": 15000,
+    "stock": 10
+  }
+]
