@@ -1,7 +1,7 @@
 const path = require ('path')
 const mongoose = require('mongoose')
 const fs = require ('fs/promises')
-const { error } = require('console')
+const Firebase = require('../firebase')
 
 class Producto {
 
@@ -19,33 +19,53 @@ class Producto {
 
         this.data=[]
         this.model=mongoose.model('Producto', schema)
+        
     }
 
     async agregarProducto(obj){
+        const query = Firebase.db.collection('productos')
+        const ultimoId = await (await query.get()).size + 1
+        console.log(ultimoId)
+        const nuevoDoc = query.doc(`${ultimoId}`) 
+        await nuevoDoc.create(obj)
         const producto = await this.model.create(obj)
-        console.log("_______________")
-        console.log(JSON.stringify(producto,null,2))
         return producto
     }
 
     async reemplazarProducto(id_prod, obj){
+        const query = Firebase.db.collection('productos')
+        const doc = query.doc(`${id_prod}`)
+        await doc.update(obj)
         const rep = await this.model.updateOne({id:id_prod},obj)
         return rep.modifiedCount
     }
 
     async eliminarProducto(id_prod){
-        console.log(id_prod)
+        const query = Firebase.db.collection('productos')
+        const doc = query.doc(`${id_prod}`)
+        await doc.delete()
         await this.model.deleteOne({id:id_prod})
 
     }
 
-    async leerProducto(params){        
+    async leerProducto(params){    
+        const query = Firebase.db.collection('productos')
+        const FbData = await query.get(params.id) 
+        const doc = FbData.docs  
+        console.log(doc[0].data())
         this.data = await this.model.find({id:params.id})
+        
     }
 
     async readData(){
+        const query = Firebase.db.collection('productos')
+        const FbData = await query.get()
+        const docs = FbData.docs
+        for(let d of docs){
+            console.log(d.data())
+        }
 
-       this.data = await this.model.find({})
+        this.data = await this.model.find({})
     }
 
     // constructor(){

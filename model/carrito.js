@@ -1,6 +1,7 @@
 const path = require ('path')
 const mongoose = require('mongoose')
 const fs = require ('fs/promises')
+const Firebase = require('../firebase')
 
 class Carrito {
 
@@ -12,34 +13,53 @@ class Carrito {
             productos: []
         })
         this.data=[]
-        this.model = mongoose.model('Carrito', schema)
+        this.model = mongoose.model('carritos', schema)
     }
 
 
     async leerCarrito(id_carrito){
+        const query = Firebase.db.collection('carritos')
+        const FbData = await query.get()
+        const docs = FbData.docs
+        for(let d of docs){
+            console.log(d.data())
+        }
         const carrito = await this.model.find({id:id_carrito},{})
         this.data = carrito
     }
 
     async crearCarrito(){
+        const query = Firebase.db.collection('carritos')
+        const ultimoIdFb = await (await query.get()).size + 1
+        console.log(ultimoIdFb)
+        const nuevoDoc = query.doc(`${ultimoIdFb}`) 
+        await nuevoDoc.create([{id: ultimoIdFb}, {timestamp: Date.now()}, {productos: []}])
+
         const ultimoId = await this.model.countDocuments()+1
         await this.model.create([{id: ultimoId}])
         return ultimoId
     }
 
     async agregarProducto(idCarrito, Producto){
+        const query = Firebase.db.collection('carritos')
         const carritoBuscado = await this.model.findOneAndUpdate({id:idCarrito}, {$push: {productos: Producto}})
     }
 
     async eliminarCarrito(idCarrito){
+        const query = Firebase.db.collection('carritos')
         await this.model.deleteOne({id:idCarrito})
     }
 
     async eliminarProducto(idCarrito, idProducto){
-        let documento = await this.model.updateOne({id: idCarrito}, {productos:{$pull:{id: idProducto}}})
-        console.log(documento)
-        
-        //const resultado = await this.model.deleteOne({id:idCarrito}, {$pull:{productos:{id:idProducto}}} )
+        const query = Firebase.db.collection('carritos')
+
+        let listaProd = await this.model.find({id:idCarrito},{productos})
+        for(let prod of listaProd){
+            if (prod.id === idProducto){
+                prod.delete()
+            }
+        }
+        await this.model.updateOne({id:idCarrito},{productos: listaProd})    
     }
 
     // constructor(){

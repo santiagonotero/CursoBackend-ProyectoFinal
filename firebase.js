@@ -1,20 +1,24 @@
-(async ()=>{
-    console.log('IIFE')
-    const admin = require('firebase-admin')
-    const {getFirestore} = require ('firebase-admin/firestore')
+class Firebase{
 
-    const serviceAccount = require('./Firebase/sdk.json')
+    constructor(){
+        this.db
+    }
 
-    admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount),
-        databaseURL:"https://Backend-Coderhouse-camada17070.firebaseio.com"
-    })
+    initFirebase (){
+        const admin = require('firebase-admin')
+        const {getFirestore} = require ('firebase-admin/firestore')
 
-    const db = getFirestore()
+        const serviceAccount = require('./DBconfig/Firebase/sdk.json')
 
-    console.log("Conectado")
+        admin.initializeApp({
+            credential: admin.credential.cert(serviceAccount),
+            databaseURL:"https://Backend-Coderhouse-camada17070.firebaseio.com"
+        })
 
-    const query = db.collection("productos")
-    const data = await query.get()
-    
-})()
+        this.db = getFirestore()
+
+        console.log("Conectado a Firestore")
+    }
+}
+module.exports = new Firebase
+
