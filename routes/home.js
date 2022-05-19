@@ -71,7 +71,18 @@ homeRouter.get('/cart', auth, async (req, res) => {
     catch(err){
         console.log(err)
     }
+
+    res.status(200)
 })
+
+
+homeRouter.get('/cartok', auth, (req, res)=>{
+
+    console.log('homeRouter.get ->/cartok')
+
+    res.render('cartok')
+})
+
 
 homeRouter.get('/signup', (req, res) => {
     res.render('signup')

@@ -66,7 +66,7 @@ routerCarrito.delete('/:id/productos/:id_prod', async (req,res)=>{
     }
 })
 
-routerCarrito.get('/finalizarcompra', async(req,res) => {
+routerCarrito.post('/finalizarcompra', async(req, res) => {
 
     const listaCarrito = {...await Carrito.leerCarrito(req.user.idCarrito)}
     const listaArticulos = listaCarrito[0].productos
@@ -80,17 +80,16 @@ routerCarrito.get('/finalizarcompra', async(req,res) => {
     } 
     
     const usuario =req.user
-
+    
     //Mandar mensaje por sms y whatsapp
-    sendWhatsapp(usuario, arrayArticulos, precioTotal)
-
+    //sendWhatsapp(usuario, arrayArticulos, precioTotal)
+    
     //Enviar notificación por mail al administrador
     MailSender.nuevaCompra(usuario, arrayArticulos, precioTotal)
+    
+    await Carrito.vaciarCarrito(req.user.idCarrito)
 
-    //await Carrito.vaciarCarrito(req.user.idCarrito)
-
-
-    res.sendStatus(200)
+    res.redirect("/cartok")
 })
 
 module.exports = routerCarrito

@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js",
-    "dev": "nodemon app.js"
+    "start": "node app.js --mode=fork",
+    "start:cluster": "node app.js --mode=cluster",
+    "dev": "nodemon app.js --mode=fork"
   },
   "author": "",
   "license": "ISC",
@@ -30,6 +31,8 @@
     "passport": "^0.5.2",
     "passport-local": "^1.0.0",
     "socket.io": "^4.5.0",
-    "twilio": "^3.77.0"
+    "twilio": "^3.77.0",
+    "winston": "^3.7.2",
+    "yargs": "^17.5.1"
   }
 }
