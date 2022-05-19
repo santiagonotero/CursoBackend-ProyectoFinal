@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+{{>header}}
+
+    <body>
+        <h1>¿Aún no estás registrado?</h1>
+        <p>Completa estos datos para crear tu cuenta</p>
+        <div>
+            <form action="/signup" method="POST" enctype="multipart/form-data">
+                <input name="nombre" id="nombre" type="text" placeholder="Nombre de usuario">
+                <input name="edad" id="edad" type="text" placeholder="Tu edad">
+                <input name="direccion" id="direccion" type="text" placeholder="Dirección">
+                <input name="telefono" id="telefono" type="tel" placeholder="Teléfono">
+                <input name="email" id="email" type="text" placeholder="Correo electrónico">
+                <input name="password" id="password" type="password" placeholder="Contraseña">
+                
+                <p>Foto de perfil</p>
+                <input name="avatar" id="avatar" type="file" placeholder="Foto de perfil">
+                
+                <button type="submit">Enviar</button>
+            </form>
+            <div><p>Si ya tienes cuenta, ingresa <a href="/login">aqui</a></p></div>
+        </div>
+    </body>
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js" ></script>
+<script src="/static/scripts.js"></script>
+</html>

@@ -8,6 +8,9 @@ routerCarrito.post('/', async (req,res)=>{
 })
 
 routerCarrito.get('/:id/productos', async (req,res)=>{   //Me permite listar todos los productos guardados en el carrito
+    
+    console.log(req.params.id)
+
     await Carrito.leerCarrito(req.params.id)
     try{
         if(Carrito.data.length){
@@ -28,9 +31,11 @@ routerCarrito.delete('/:id', async (req,res)=>{
 })
 
 routerCarrito.post('/:id/productos', async (req,res)=>{
-    const body  = req.body
+
+    const idCarrito = req.user.idCarrito
+    
     try{
-        await Carrito.agregarProducto(req.params.id, ...body)
+        await Carrito.agregarProducto(req.params.id, idCarrito)//, ...body)
         res.sendStatus(201)
     }
     catch(err){
@@ -46,8 +51,9 @@ routerCarrito.post('/:id/productos', async (req,res)=>{
 routerCarrito.delete('/:id/productos/:id_prod', async (req,res)=>{
     const {id, id_prod} = req.params
     try{
-        await Carrito.eliminarProducto(id, id_prod)
-        res.sendStatus(200)
+        let listadoCarrito = await Carrito.leerProductos(id) //Cargo los artículos del carrito del
+
+        res.send(listadoCarrito).status(200)
     }
     catch(err){
         if(err.message === 'Carrito no encontrado'){

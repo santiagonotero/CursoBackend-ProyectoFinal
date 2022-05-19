@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+{{>header}}
+{{>navbar}}
+    <body>
+        <h1>Esto es lo que tenemos para ofrecerte hoy</h1>
+
+        
+            <ul>{{#each inventario}}
+                <li><h2>{{this.nombre}}</h2></li>
+                <li><p>{{this.descripcion}}</p></li>
+                <li><p>Código: {{this.codigo}}</p></li>
+                <li><img src={{this.foto}} /></li>
+                <li> <p>Precio: ARS{{this.precio}}</p></li>
+
+                <button onclick="addToCart({{this.codigo}})">Agregar al carrito</button>
+            {{/each}}</ul>
+ 
+    </body>
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js" ></script>
+    <script src="/static/scripts.js"></script>
+</html>

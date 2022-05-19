@@ -7,6 +7,7 @@ let administrador = true
 routerProductos.get('/', async (req, res) => {
     await Productos.readData()
     if (Productos.data.length){
+
         res.send(Productos.data).status(200)
     }
     else{
