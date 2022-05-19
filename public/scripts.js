@@ -11,7 +11,6 @@ addNewUser=(e)=>{
         password: document.getElementById('password').value,
         avatar: document.getElementById('avatar').value,
     }
-    console.log(userData.avatar)
     socket.emit('newUser', userData)
     
 }

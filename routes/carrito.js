@@ -1,6 +1,9 @@
 const {Router} = require ('express')
 const routerCarrito = Router()
 const Carrito = require ('../model/carrito')
+const Productos = require ('../model/productos')
+const sendWhatsapp = require('../notifications/whatsapp')
+const MailSender = require('../notifications/email')
 
 routerCarrito.post('/', async (req,res)=>{
     const IdCarrito = await Carrito.crearCarrito()
@@ -8,8 +11,6 @@ routerCarrito.post('/', async (req,res)=>{
 })
 
 routerCarrito.get('/:id/productos', async (req,res)=>{   //Me permite listar todos los productos guardados en el carrito
-    
-    console.log(req.params.id)
 
     await Carrito.leerCarrito(req.params.id)
     try{
@@ -66,10 +67,27 @@ routerCarrito.delete('/:id/productos/:id_prod', async (req,res)=>{
 })
 
 routerCarrito.get('/finalizarcompra', async(req,res) => {
+
+    const listaCarrito = {...await Carrito.leerCarrito(req.user.idCarrito)}
+    const listaArticulos = listaCarrito[0].productos
+    let arrayArticulos =[]
+    let precioTotal = 0
     
+    for(let i=0; i<listaArticulos.length; i++) {
+        const detalleProducto = {...await Productos.leerProducto(listaArticulos[i])}
+        arrayArticulos.push({nombre: detalleProducto[0].nombre, precio: detalleProducto[0].precio, codigo: listaArticulos[i]})
+        precioTotal +=JSON.parse(detalleProducto[0].precio)
+    } 
+    
+    const usuario =req.user
+
     //Mandar mensaje por sms y whatsapp
-    
-    await Carrito.vaciarCarrito(req.user.idCarrito)
+    sendWhatsapp(usuario, arrayArticulos, precioTotal)
+
+    //Enviar notificación por mail al administrador
+    MailSender.nuevaCompra(usuario, arrayArticulos, precioTotal)
+
+    //await Carrito.vaciarCarrito(req.user.idCarrito)
 
 
     res.sendStatus(200)

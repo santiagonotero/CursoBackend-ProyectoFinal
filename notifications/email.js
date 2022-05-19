@@ -1,7 +1,11 @@
 const nodemailer = require('nodemailer')
 const config = require('../config/index')
 
-const TEST_EMAIL = config.mail.GMAIL_ADDRESS
+const path = require('path')
+require('dotenv').config({
+    path: path.resolve(__dirname, '../.env')
+  })
+
 
 class MailSender {
 
@@ -19,19 +23,38 @@ class MailSender {
     });
   }
 
-  async send(template, email) {
+
+  async nuevaCompra(user, arrayArticulos, precioTotal) {
+
+    let msgBody = `<h1>Felicitaciones!!! Un cliente ha efectuado una nueva compra en tu comercio online</h1>
+    <p>Hola!!! Tenemos buenas noticias para tí!!!. Un cliente acaba de efectuar una compra en el sitio web. Te damos los detalles de esta compra:</p>
+    <ul>
+        <li>Nombre del cliente: ${user.nombre} </li>
+        <li>Dirección: ${user.direccion}</li>
+        <li>Teléfono: ${user.telefono}</li> 
+        <li>Email: ${user.email}</li>
+    </ul>
+    <p>Y estos son los productos de su carrito:</p>
+    <ul>`
+
+    for(let i = 0; i < arrayArticulos.length; i++){
+        msgBody += `<li>Artículo: ${arrayArticulos[i].nombre} - Código: ${arrayArticulos[i].codigo} - Precio del artículo: ${arrayArticulos[i].precio}</li>`
+    }
+    
+
+    msgBody += `</ul>
+                <p>El valor total de la compra es de ARS${precioTotal}</p>`
+
     const mailOptions = {
       from: "Notificaciones <contacto@tiendavirtual.com>",
-      subject: "Tu pedido está siendo procesado",
-      to: email,
-      html: 'template',
+      subject: "Nueva compra desde el sitio web",
+      to: process.env.GMAIL_ADDRESS,
+      html: msgBody,
       attachments: [{
-        path: __dirname + '/pedido.png'
       }]
     }
 
     const response = await this.transporter.sendMail(mailOptions)
-    console.log(response)
   }
 
   async newUserMail(nombre, edad, direccion, telefono, email) {

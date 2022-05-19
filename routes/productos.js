@@ -69,7 +69,6 @@ routerProductos.put('/:id', async (req, res) => {
 routerProductos.delete('/:id', async (req, res) => {
 
     if(administrador) {
-        console.log(req.params.id)
         await Productos.eliminarProducto(req.params.id)
         res.send('Producto eliminado').status(200)
     }

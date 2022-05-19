@@ -55,7 +55,6 @@ passport.use('signup', new LocalStrategy({
                 console.log('Error al guardar usuario' + err)
                 return done(err)
             }
-            console.log(user)
             console.log('Registro de usuario exitoso')
             return done(null, userWithId)
         })

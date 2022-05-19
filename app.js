@@ -24,6 +24,8 @@ const { HOSTNAME, SCHEMA, DATABASE, USER, PASSWORD, OPTIONS } = require("./DBcon
 
 const PORT= process.env.PORT || 8080
 
+console.log(process.env.PORT)
+
 // Conexión a MongoDB
 
 mongoose.connect(`${SCHEMA}://${USER}:${PASSWORD}@${HOSTNAME}/${DATABASE}?${OPTIONS}`).then(()=>{
@@ -88,7 +90,6 @@ mongoose.connect(`${SCHEMA}://${USER}:${PASSWORD}@${HOSTNAME}/${DATABASE}?${OPTI
 
     io.on("connection", async function (socket) {
       socket.on('newUser', (userData)=>{
-        console.log('app.js-> userData %o', userData)
       })
     })
 

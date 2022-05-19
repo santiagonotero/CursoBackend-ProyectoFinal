@@ -54,11 +54,8 @@ class Carrito {
     }
 
     async vaciarCarrito(idCarrito){
-        console.log('idCarrito: ', idCarrito)
         const carritoBuscado = await this.model.find({_id:mongoose.Types.ObjectId(idCarrito)},{}).lean()
-        console.log('carritoBuscado: ', carritoBuscado)
         const totalItems = {...carritoBuscado}
-        console.log(totalItems)
         await this.model.findOneAndUpdate({_id:mongoose.Types.ObjectId(idCarrito)},{productos: []}) 
 
     }
