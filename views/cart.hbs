@@ -5,8 +5,28 @@
     <body>
         <h1>Tu carrito de compras</h1>
         <div>
-
-
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Código</th>
+                        <th>Precio</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {{#each carrito}}
+                    <tr>
+                        <td><p>{{this.nombre}}</p></td>
+                        <td><p>{{this.codigo}}</p></td>
+                        <td><p>ARS{{this.precio}}</p></td>
+                    </tr>
+                {{/each}}
+                </tbody>
+            </table>
+            <div><p>Total a pagar: ARS {{precioTotal}}</p></div>
         </div>
+        <button onclick="finalizarCompra()">Finalizar compra</button>
     </body>
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js" ></script>
+    <script src="/static/scripts.js"></script>
 </html>

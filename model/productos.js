@@ -39,9 +39,11 @@ class Producto {
 
     }
 
-    async leerProducto(params){    
+    async leerProducto(codigoProducto){//params){    
 
-        this.data = await this.model.find({id:params.id}).lean()
+        //this.data = await this.model.find({id:params.id}).lean()
+
+        return await this.model.find({codigo: codigoProducto}).lean()
         
     }
 

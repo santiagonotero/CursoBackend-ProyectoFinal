@@ -10,7 +10,7 @@ class Carrito {
         const schema = new mongoose.Schema({
             id: Number, 
             timestamp: {type: Number, default:Date.now()},
-            productos: {type: Object, default:[]}
+            productos: {type: Object, default:{}}
         })
         this.data=[]
         this.model = mongoose.model('carritos', schema)
@@ -21,6 +21,7 @@ class Carrito {
 
         const carrito = await this.model.find({_id:mongoose.Types.ObjectId(id_carrito)},{}).lean()
         this.data = carrito
+        return carrito
     }
 
     async crearCarrito(){
@@ -50,6 +51,16 @@ class Carrito {
 
     async eliminarCarrito(idCarrito){
         await this.model.deleteOne({_id:idCarrito})
+    }
+
+    async vaciarCarrito(idCarrito){
+        console.log('idCarrito: ', idCarrito)
+        const carritoBuscado = await this.model.find({_id:mongoose.Types.ObjectId(idCarrito)},{}).lean()
+        console.log('carritoBuscado: ', carritoBuscado)
+        const totalItems = {...carritoBuscado}
+        console.log(totalItems)
+        await this.model.findOneAndUpdate({_id:mongoose.Types.ObjectId(idCarrito)},{productos: []}) 
+
     }
 
     async eliminarProducto(idCarrito, idProducto){

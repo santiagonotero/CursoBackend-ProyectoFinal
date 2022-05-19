@@ -65,4 +65,14 @@ routerCarrito.delete('/:id/productos/:id_prod', async (req,res)=>{
     }
 })
 
+routerCarrito.get('/finalizarcompra', async(req,res) => {
+    
+    //Mandar mensaje por sms y whatsapp
+    
+    await Carrito.vaciarCarrito(req.user.idCarrito)
+
+
+    res.sendStatus(200)
+})
+
 module.exports = routerCarrito

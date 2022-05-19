@@ -51,15 +51,26 @@ homeRouter.get('/logout', auth, (req, res) => {
     res.render('logout')
 })
 
-homeRouter.get('/cart', async (req, res) => {
+homeRouter.get('/cart', auth, async (req, res) => {
 
-    console.log(req.user)
+    try {
+        const carrito = await Carrito.leerCarrito(req.user.idCarrito)
+        let listaArticulos = {...carrito}[0].productos
 
-    const carrito = await Carrito.leerCarrito(req.user.idCarrito)
+        let arrayArticulos = []
+        let precioTotal = 0
 
-    console.log('carrito', carrito)
+        for(let i=0; i<listaArticulos.length; i++) {
+            const detalleProducto = {...await Productos.leerProducto(listaArticulos[i])}
+            arrayArticulos.push({nombre: detalleProducto[0].nombre, precio: detalleProducto[0].precio, codigo: listaArticulos[i]})
+            precioTotal +=JSON.parse(detalleProducto[0].precio)
+        } 
 
-    res.render('cart', { layout:'cart', carrito: carrito})
+        res.render('cart', { layout:'cart', carrito: arrayArticulos, precioTotal: precioTotal})
+    }
+    catch(err){
+        console.log(err)
+    }
 })
 
 homeRouter.get('/signup', (req, res) => {

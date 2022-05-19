@@ -22,3 +22,8 @@ async function addToCart(idProducto){
     const res = await fetch(`/api/carrito/${idProducto}/productos`, { method: 'POST' })
 
 }
+
+async function finalizarCompra(){
+
+    const res = await fetch(`/api/carrito/finalizarcompra`)
+}

@@ -10,8 +10,8 @@ class MailSender {
       service: 'gmail',
       port: 587,
       auth: {
-          user: 'santiagonotero@gmail.com', //process.env.GMAIL_ADDRESS,
-          pass: 'bkciaxdaxrrkblfc' //process.env.GMAIL_PWD
+          user: process.env.GMAIL_ADDRESS,
+          pass: process.env.GMAIL_PWD
       },    
       tls: {
         rejectUnauthorized: false
@@ -51,7 +51,6 @@ class MailSender {
     }
 
     const response = await this.transporter.sendMail(mailOptions)
-    console.log(response)
   }
 }
 
