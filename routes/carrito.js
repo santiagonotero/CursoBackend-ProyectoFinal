@@ -82,7 +82,7 @@ routerCarrito.post('/finalizarcompra', async(req, res) => {
     const usuario =req.user
     
     //Mandar mensaje por sms y whatsapp
-    //sendWhatsapp(usuario, arrayArticulos, precioTotal)
+    sendWhatsapp(usuario, arrayArticulos, precioTotal)
     
     //Enviar notificación por mail al administrador
     MailSender.nuevaCompra(usuario, arrayArticulos, precioTotal)
