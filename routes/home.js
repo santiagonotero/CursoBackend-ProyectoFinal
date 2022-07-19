@@ -1,21 +1,22 @@
 const {Router} = require ('express')
 const {auth} = require ('../middlewares/auth')
+const multer = require('multer')
 const passport=require('passport')
+const logger = require("../Logs/winston")
 const homeRouter = Router()
 const Productos = require ('../model/productos')
 const Usuario = require('../model/usuarios')
 const Carrito = require('../model/carrito')
+const Mensajes = require('../model/mensajes')
+const controller = require('../model/routes.methods')
 
 homeRouter.get('/api/currentuser', (req, res)=>{
 
     const userProfile ={
         nombre: req.user.nombre,
-        idCarrito: req.user.idCarrito,
+        apellido: req.user.apellido,
         email: req.user.email,
-        direccion: req.user.direccion,
-        telefono: req.user.telefono,
-        avatar: req.user.avatar,
-        edad: req.user.edad,
+        telefono: req.user.telefono
     }
 
     res.send(userProfile).status(200)
@@ -23,10 +24,11 @@ homeRouter.get('/api/currentuser', (req, res)=>{
 
 homeRouter.get('/', auth, async (req, res) => {
     await Productos.readData()
+    await Mensajes.cargarMensajes()
     const inventario = Productos.data
     if(Productos.data.length){
 
-        res.render('index', { layout: 'index', inventario: inventario })
+        res.render('index', { layout: 'index', inventario: inventario, nombre: `${Usuario.data.nombre} ${Usuario.data.apellido}`, email: Usuario.data.email})
     }
 })
 
@@ -48,7 +50,7 @@ homeRouter.post('/logout' , (req, res)=>{
 homeRouter.get('/logout', auth, (req, res) => {
 
     req.logOut()
-    res.render('logout')
+    res.render('logout', {layout: 'logout', nombre: Usuario.data.nombre})
 })
 
 homeRouter.get('/cart', auth, async (req, res) => {
@@ -69,7 +71,7 @@ homeRouter.get('/cart', auth, async (req, res) => {
         res.render('cart', { layout:'cart', carrito: arrayArticulos, precioTotal: precioTotal})
     }
     catch(err){
-        console.log(err)
+        logger.error(err)
     }
 
     res.status(200)
@@ -78,24 +80,34 @@ homeRouter.get('/cart', auth, async (req, res) => {
 
 homeRouter.get('/cartok', auth, (req, res)=>{
 
-    console.log('homeRouter.get ->/cartok')
-
     res.render('cartok')
 })
 
 
 homeRouter.get('/signup', (req, res) => {
+
     res.render('signup')
 })
 
-homeRouter.post('/signup', passport.authenticate('signup', {
+homeRouter.post('/signup', 
+//         (req, res, next) => {
+//         if(req.body.password1 === req.body.password2){
+//             console.log('Contraseñas coinciden')
+//             console.log(req.body)
+//             next()
+//         }
+//         else{
+//             console.log('Contraseñas no son iguales')
+//             next()
+//         }
+//     },
+    passport.authenticate('signup', {
     successRedirect: "/",
     failureRedirect: "/signup",
-    failureFlash: true
-    }),
-    (req, res) => {
+    failureFlash: false
+    }), (req, res)=>{
+        res.redirect('/')
+    }
+)
 
-     res.sendStatus(200)
-})
-
-module.exports = homeRouter
+module.exports = homeRouter;

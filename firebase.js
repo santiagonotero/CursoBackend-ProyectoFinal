@@ -1,3 +1,5 @@
+const logger = require("./Logs/winston")
+
 class Firebase{
 
     constructor(){
@@ -17,7 +19,7 @@ class Firebase{
 
         this.db = getFirestore()
 
-        console.log("Conectado a Firestore")
+        logger.info("Conectado a Firestore")
     }
 }
 module.exports = new Firebase

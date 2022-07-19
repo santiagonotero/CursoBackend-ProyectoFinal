@@ -9,6 +9,8 @@ class Carrito {
 
         const schema = new mongoose.Schema({
             id: Number, 
+            email: String,
+            direccion: String,
             timestamp: {type: Number, default:Date.now()},
             productos: {type: Object, default:{}}
         })

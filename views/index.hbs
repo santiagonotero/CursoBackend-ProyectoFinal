@@ -1,22 +1,61 @@
 <!DOCTYPE html>
 <html>
 {{>header}}
-{{>navbar}}
+{{!-- <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js" ></script> --}}
+    <title>Bienvenido!!!</title>
     <body>
-        <h1>Esto es lo que tenemos para ofrecerte hoy</h1>
+        <div class="productList" >
+            {{>navbar}}
+            <h1>Esto es lo que tenemos para ofrecerte hoy</h1>
 
-        
-            <ul>{{#each inventario}}
-                <li><h2>{{this.nombre}}</h2></li>
-                <li><p>{{this.descripcion}}</p></li>
-                <li><p>Código: {{this.codigo}}</p></li>
-                <li><img src={{this.foto}} /></li>
-                <li> <p>Precio: ARS{{this.precio}}</p></li>
+            
+                <ul>{{#each inventario}}
+                    <li><h2>{{this.nombre}}</h2></li>
+                    <li><p>{{this.descripcion}}</p></li>
+                    <li><p>Código: {{this.codigo}}</p></li>
+                    <li><img src={{this.foto}} /></li>
+                    <li> <p>Precio: ARS{{this.precio}}</p></li>
 
-                <button onclick="addToCart({{this.codigo}})">Agregar al carrito</button>
-            {{/each}}</ul>
- 
+                    <button onclick="addToCart({{this.codigo}})">Agregar al carrito</button>
+                {{/each}}</ul>
+        </div>
+        <div>
+            <h2>Chat el línea</h2>
+            <script id="plantillaChat" type="text/x-handlebars-template" >
+            <div class="chat">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Autor</th>
+                            <th>Mensaje</th>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each messages}}
+                        <tr>
+                            <td><p>{{this.email}}</p></td>
+                            <td><p>{{this.mensaje}}</p></td>
+                            <td><p>{{this.fecha}}</p></td>
+                            <td><p>{{this.hora}}</p></td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table> 
+            </div>
+            </script>
+        <div id="messagePool" ></div>
+            <form onsubmit ="return addMessage(this)">
+                <div>
+                    <label for="userMessage">Mensaje</label>
+                    <input name="userMessage" id="userMessage" type="text">
+                </div>
+                <div>
+                    <button type="submit">Enviar Mensaje</button>
+                </div>
+            </form>
     </body>
-    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js" ></script>
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
     <script src="/static/scripts.js"></script>
 </html>

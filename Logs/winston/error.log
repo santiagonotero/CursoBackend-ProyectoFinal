@@ -1,0 +1,53 @@
+2022-07-13T00:09:52.443Z [error] error en Mongo uploadFile is not defined
+2022-07-13T13:37:38.932Z [error] error en Mongo upload is not a function
+2022-07-13T13:38:08.635Z [error] error en Mongo app.use() requires a middleware function
+2022-07-14T22:08:55.006Z [error] undefined
+2022-07-15T17:37:19.429Z [error] error en Mongo io is not a function
+2022-07-15T17:37:56.837Z [error] error en Mongo io is not a function
+2022-07-15T17:39:52.003Z [error] error en Mongo io is not a function
+2022-07-15T19:24:33.318Z [error] error en Mongo io is not a function
+2022-07-15T19:25:40.810Z [error] error en Mongo io is not a function
+2022-07-15T19:26:10.248Z [error] error en Mongo app.use() requires a middleware function
+2022-07-15T19:34:57.104Z [error] error en Mongo PORT is not defined
+2022-07-15T19:40:47.235Z [error] error en Mongo options.port should be >= 0 and < 65536. Received process.env.PORT || 8080.
+2022-07-15T19:41:04.883Z [error] error en Mongo PORT is not defined
+2022-07-15T20:02:18.313Z [error] error en Mongo The value "{
+  port: { PORT: 'process.env.PORT || 8080' },
+  mongoConfig: {
+    HOSTNAME: 'cluster0.go6w7.mongodb.net',
+    SCHEMA: 'mongod..." is invalid for option "options"
+2022-07-15T20:05:52.204Z [error] error en Mongo io is not a function
+2022-07-15T20:07:14.868Z [error] error en Mongo PORT is not defined
+2022-07-15T20:07:34.016Z [error] error en Mongo io is not a function
+2022-07-15T20:08:35.730Z [error] error en Mongo PORT is not defined
+2022-07-15T20:09:19.448Z [error] error en Mongo PORT is not defined
+2022-07-15T20:09:24.278Z [error] error en Mongoooo PORT is not defined
+2022-07-15T20:42:35.367Z [error] error en Mongoooo server is not a function
+2022-07-15T20:43:08.683Z [error] error en Mongoooo server is not a function
+2022-07-15T20:57:40.970Z [error] error en Mongoooo Cannot read property 'io' of undefined
+2022-07-15T20:59:51.967Z [error] error en Mongoooo Cannot read property 'io' of undefined
+2022-07-15T21:00:14.794Z [error] error en Mongoooo genIo.io is not a function
+2022-07-15T21:04:37.661Z [error] error en Mongoooo genIo.io is not a function
+2022-07-15T21:05:45.910Z [error] error en Mongoooo genIo.io is not a function
+2022-07-15T22:07:38.841Z [error] error en Mongoooo Router.use() requires a middleware function but got a undefined
+2022-07-15T22:07:57.464Z [error] error en Mongoooo Router.use() requires a middleware function but got a undefined
+2022-07-15T22:08:26.828Z [error] error en Mongoooo Router.use() requires a middleware function but got a undefined
+2022-07-15T22:09:12.863Z [error] error en Mongoooo Router.use() requires a middleware function but got a undefined
+2022-07-15T22:10:17.892Z [error] error en Mongoooo Router.use() requires a middleware function but got a undefined
+2022-07-15T22:27:14.538Z [error] error en Mongoooo Router.use() requires a middleware function but got a undefined
+2022-07-15T22:27:22.437Z [error] error en Mongoooo Router.use() requires a middleware function but got a undefined
+2022-07-15T22:29:25.983Z [error] error en Mongoooo Router.use() requires a middleware function but got a undefined
+2022-07-15T22:31:05.546Z [error] error en Mongoooo Router.use() requires a middleware function but got a undefined
+2022-07-15T22:32:11.496Z [error] error en Mongoooo Router.use() requires a middleware function but got a undefined
+2022-07-15T22:32:23.429Z [error] error en Mongoooo Router.use() requires a middleware function but got a undefined
+2022-07-15T22:33:06.253Z [error] error en Mongoooo Router.use() requires a middleware function but got a undefined
+2022-07-15T22:33:22.113Z [error] error en Mongoooo Router.use() requires a middleware function but got a undefined
+2022-07-15T22:34:00.639Z [error] error en Mongoooo Router.use() requires a middleware function but got a undefined
+2022-07-15T22:34:11.726Z [error] error en Mongoooo Router.use() requires a middleware function but got a undefined
+2022-07-15T22:34:34.487Z [error] error en Mongoooo Router.use() requires a middleware function but got a undefined
+2022-07-15T22:37:56.146Z [error] error en Mongoooo Router.use() requires a middleware function but got a undefined
+2022-07-15T22:38:05.708Z [error] error en Mongoooo Router.use() requires a middleware function but got a undefined
+2022-07-15T22:39:45.035Z [error] error en Mongoooo Router.use() requires a middleware function but got a undefined
+2022-07-15T22:43:00.857Z [error] error en Mongoooo Router.use() requires a middleware function but got a undefined
+2022-07-15T22:43:58.521Z [error] error en Mongoooo Router.use() requires a middleware function but got a undefined
+2022-07-19T20:24:37.814Z [error] undefined

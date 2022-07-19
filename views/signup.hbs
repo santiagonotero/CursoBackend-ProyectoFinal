@@ -1,27 +1,25 @@
 <!DOCTYPE html>
 <html>
-{{>header}}
 
+{{>header}}
     <body>
         <h1>¿Aún no estás registrado?</h1>
         <p>Completa estos datos para crear tu cuenta</p>
         <div>
-            <form action="/signup" method="POST" enctype="multipart/form-data">
-                <input name="nombre" id="nombre" type="text" placeholder="Nombre de usuario">
-                <input name="edad" id="edad" type="text" placeholder="Tu edad">
-                <input name="direccion" id="direccion" type="text" placeholder="Dirección">
-                <input name="telefono" id="telefono" type="tel" placeholder="Teléfono">
-                <input name="email" id="email" type="text" placeholder="Correo electrónico">
-                <input name="password" id="password" type="password" placeholder="Contraseña">
-                
-                <p>Foto de perfil</p>
-                <input name="avatar" id="avatar" type="file" placeholder="Foto de perfil">
-                
-                <button type="submit">Enviar</button>
+            {{!--action="/signup" method="POST"     --}}
+            <form id="formUsuario" onSubmit="return addNewUser(this)" enctype="multipart/form-data"/>
+                <input name="nombre" id="nombre" type="text" placeholder="Nombre" />
+                <input name="apellido" id="apellido" type="text" placeholder="Apellido" />
+                <input name="telefono" id="telefono" type="tel" placeholder="Teléfono" />
+                <input name="email" id="email" type="text" placeholder="Correo electrónico" />
+                <input name="password1" id="password1" type="password" placeholder="Contraseña" />
+                <input name="password2" id="password2" type="password" placeholder="Repetir contraseña" />
+                <label id="pwdError" style="color: red"></label>
+                <input type="submit" value="Registrarse" />
             </form>
             <div><p>Si ya tienes cuenta, ingresa <a href="/login">aqui</a></p></div>
         </div>
     </body>
     <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js" ></script>
-<script src="/static/scripts.js"></script>
+    <script src="static/scripts.js"></script>
 </html>

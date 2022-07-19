@@ -10,6 +10,7 @@ class Producto {
             timestamp: {type: Number, default: Date.now()},
             nombre: String,
             descripcion: String,
+            categoria: String,
             codigo: String,
             foto: String,
             precio: Number,

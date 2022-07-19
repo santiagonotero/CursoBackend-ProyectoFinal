@@ -1,6 +1,7 @@
-
-
 module.exports = {
+    port: {
+      PORT: process.env.PORT || 8080
+    },
     mongoConfig: {
       HOSTNAME: "cluster0.go6w7.mongodb.net",
       SCHEMA: "mongodb+srv",

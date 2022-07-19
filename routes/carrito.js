@@ -1,4 +1,5 @@
 const {Router} = require ('express')
+const logger = require("../Logs/winston")
 const routerCarrito = Router()
 const Carrito = require ('../model/carrito')
 const Productos = require ('../model/productos')
@@ -22,7 +23,7 @@ routerCarrito.get('/:id/productos', async (req,res)=>{   //Me permite listar tod
         }
     }
     catch(err){
-        console.log(err)
+        logger.error(err)
     }
 })
 

@@ -1,4 +1,4 @@
-
+const logger = require("../Logs/winston")
 
 const Contenedor = class {
 
@@ -18,7 +18,7 @@ const Contenedor = class {
             datosParseados=JSON.parse(contenido)
         }
         catch(error){
-            console.log('No se pudo abrir el archivo. Código de error:' + error)
+            logger.error('No se pudo abrir el archivo. Código de error:' + error)
         }
         
         if(datosParseados.length>0){
@@ -35,11 +35,11 @@ const Contenedor = class {
 
         try{
             await fs.promises.writeFile(this.nombreArchivo,JSON.stringify(datosParseados),"utf8")
-                console.log('El dato fue agregado al archivo')
+                logger.info('El dato fue agregado al archivo')
         }
 
         catch(err){
-            console.log('No se pudo agregar el dato al archivo')
+            logger.error('No se pudo agregar el dato al archivo')
         }
     }
 
@@ -55,7 +55,7 @@ const Contenedor = class {
             datosParseados=JSON.parse(contenido)
         }
         catch(error){
-            console.log('No se pudo abrir el archivo. Código de error:' + error)
+            logger.error('No se pudo abrir el archivo. Código de error:' + error)
         }
         
         datosParseados.map(elemento=>{
@@ -78,10 +78,10 @@ const Contenedor = class {
         let datosParseados
         try{
             contenido = await fs.promises.readFile(this.nombreArchivo,'utf8')
-            console.log(JSON.parse(contenido))
+            logger.info(JSON.parse(contenido))
         }
         catch(error){
-            console.log('No se pudo abrir el archivo. Código de error:' + error)
+            logger.error('No se pudo abrir el archivo. Código de error:' + error)
         }
     }
 
@@ -101,16 +101,16 @@ const Contenedor = class {
                 })
             }
             catch(error){
-                console.log('No se pudo abrir el archivo. Código de error:' + error)
+                logger.error('No se pudo abrir el archivo. Código de error:' + error)
             }
             
             try{
                 await fs.promises.writeFile(this.nombreArchivo,JSON.stringify(datosFiltrados),"utf8")
-                    console.log('El dato fue borrado del archivo')
+                    logger.info('El dato fue borrado del archivo')
             }
     
             catch(err){
-                console.log('No se pudo borrar dicho dato')
+                logger.error('No se pudo borrar dicho dato')
             }
 
     }
@@ -120,11 +120,11 @@ const Contenedor = class {
         const fs=require('fs')
         try{
             await fs.promises.writeFile(this.nombreArchivo,JSON.stringify([]),"utf8")
-                console.log('Archivo borrado con éxito')
+                logger.info('Archivo borrado con éxito')
         }
 
         catch(err){
-            console.log('No se pudo realizar la operación')
+            logger.error('No se pudo realizar la operación')
         }
     }
     

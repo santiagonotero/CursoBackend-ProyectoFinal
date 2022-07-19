@@ -9,6 +9,7 @@ class Usuario {
             id: Number,
             email: String,
             nombre: String,
+            apellido: String,
             password: String,
             direccion: String,
             edad: Number,
@@ -32,8 +33,6 @@ class Usuario {
 
         obj.password = await bcrypt.hash(obj.password, 10)
         return await this.model.create(obj)
-        // const usuario = await this.model.create(obj)
-        // return usuario
     }
 
       // existe por email
@@ -54,6 +53,7 @@ class Usuario {
             id: user._id,
             nombre: user.nombre,
             email: user.email,
+            apellido: user.apellido,
             direccion: user.direccion,
             edad: user.edad,
             password: user.password,

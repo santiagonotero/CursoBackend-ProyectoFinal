@@ -1,32 +1,37 @@
-const express = require('express')
-const app = express()
-const path=require('path')
-let server = require('http').Server(app)
-let io = require('socket.io')(server)
-const mongoose = require('mongoose')
-const passport = require('passport')
-const MongoStore = require('connect-mongo')
-const multer = require('multer')
-const cookieParser = require('cookie-parser')
-const session= require('express-session')
-const flash = require('express-flash')
-const yargs = require('yargs')
-const cluster = require('cluster')
-const numCPUs = require ('os').cpus().length
-const {engine} = require ('express-handlebars')
-const homeRouter= require('./routes/home')
-const cartRouter = require('./routes/carrito')
-const productRouter = require('./routes/productos')
-const initializePassport=require('./middlewares/passport')
+const express = require('express');
+const app = express();
+const path=require('path');
+let server = require('http').Server(app);
+let io = require('socket.io')(server);
+const mongoose = require('mongoose');
+const passport = require('passport');
+const MongoStore = require('connect-mongo');
+const cookieParser = require('cookie-parser');
+const session= require('express-session');
+const flash = require('express-flash');
+const yargs = require('yargs');
+const cluster = require('cluster');
+const logger = require("./Logs/winston");
+const numCPUs = require ('os').cpus().length;
+const {engine} = require ('express-handlebars');
+const Mensajes = require('./model/mensajes');
+const homeRouter= require('./routes/home');
+const cartRouter = require('./routes/carrito');
+const productRouter = require('./routes/productos');
+const initializePassport=require('./middlewares/passport');
+//const {port} = require('./config')
 require('dotenv').config({
   path: path.resolve(__dirname, '.env')
 })
+
+const PORT = process.envPORT || 8080
+let messagePool={}  // Mensajes del canal de chat
 
 function iniciarMain(){
   // Conexión a MongoDB
 
   mongoose.connect(`${SCHEMA}://${USER}:${PASSWORD}@${HOSTNAME}/${DATABASE}?${OPTIONS}`).then(()=>{
-      console.log("Conectado con base de datos MongoDB")
+      logger.info("Conectado con base de datos MongoDB")
 
       initializePassport(passport)
 
@@ -34,20 +39,6 @@ function iniciarMain(){
 
       app.use(express.json())
       app.use(express.urlencoded({ extended: true}))
-
-      const storage = multer.diskStorage(
-        { destination: function (req, file, cb) {cb (null, 'Avatares')},
-          filename:(req, file,cb)=>{
-          const extension = file.mimetype.split('/')[1]
-          cb(null, `Avatar - ${req.body.email} - ${Date.now()}.${extension}`)
-          }
-        }
-      )
-
-      app.use(multer({
-        storage,
-        dest: '/Avatares'
-      }).single('avatar'))
 
       app.use(flash())
       app.use(cookieParser("Esto es un secreto"))
@@ -58,7 +49,7 @@ function iniciarMain(){
 
         store:new MongoStore({
           mongoUrl: `${SCHEMA}://${USER}:${PASSWORD}@${HOSTNAME}/${DATABASE}?${OPTIONS}`,
-          expires: 60*30,
+          expires: 1000*60*30, // Tiempo de expiración: 30 minutos
           createdAt: new Date(),
           autoRemove: 'native',
           autoRemoveInterval: 1,
@@ -73,7 +64,6 @@ function iniciarMain(){
       app.use(passport.session())
 
       app.use('/', homeRouter)
-      //app.use('/upload', uploadRouter)
       app.use('/api/carrito', cartRouter)
       app.use('/api/productos', productRouter)
 
@@ -85,19 +75,29 @@ function iniciarMain(){
         defaultLayout:''
       }))
 
-      io.on("connection", async function (socket) {
-        socket.on('newUser', (userData)=>{
+      io.on("connection", (socket)=>{
+        
+        logger.info("Iniciando sockets")
+        Mensajes.cargarMensajes().then(()=>{
+          socket.emit("loadMessages", {...Mensajes.data})
+        })
+
+        socket.on('newMessage', (data)=>{  // Mensaje que indica un nuevo mensaje de chat recibido
+          console.log('Nuevo mensaje: ', data)
+          Mensajes.agregarMensaje(data).then(()=>{  // Almacenar mensaje en la base de datos
+            Mensajes.data.push(data)
+          })
+          io.sockets.emit("loadMessages", {...Mensajes.data})
         })
       })
 
       server.listen(PORT, ()=>{
-          console.log(`Realizando conexión con el puerto ${PORT}`)
+          logger.info(`Realizando conexión con el puerto ${PORT}`)
       })
-
   })        
 
   .catch((err)=>{
-          console.log("error en Mongo", err)
+          logger.error("error en Mongoooo", err)
   })
 
 }
@@ -105,26 +105,24 @@ function iniciarMain(){
 
 const { HOSTNAME, SCHEMA, DATABASE, USER, PASSWORD, OPTIONS } = require("./DBconfig/Mongo")
 
-const PORT= process.env.PORT || 8080
-
 const args = yargs.default({ PORT: 8080, mode:'fork'}).argv
 
 if(args.mode ==='cluster'){   //Si el modo es Cluster...
   
-  console.log('modo CLUSTER')
+  logger.info('modo CLUSTER')
   if(cluster.isMaster) {    // Si el proceso es padre...
     for(let i=0; i<=numCPUs; i++){
       
-      console.log ('Creando nuevo Fork')
+      logger.info('Creando nuevo Fork')
       cluster.fork()
       
     }
     
     cluster.on('exit', (worker, code, signal)=>{
-      console.log(`worker ${worker.process.id} murió`)
+      logger.info(`worker ${worker.process.id} murió`)
     })
     
-    console.log (`Proceso primario ${process.pid}`)
+    logger.info(`Proceso primario ${process.pid}`)
   }   //if(mode == 'cluster')
 
   else{           // Si el proceso es hijo en modo cluster...
@@ -133,7 +131,11 @@ if(args.mode ==='cluster'){   //Si el modo es Cluster...
 }
 
 else{
-  console.log('Modo FORK')
+  logger.info('Servicio iniciado en modo FORK')
   iniciarMain()
 }
+
+
+
+
 

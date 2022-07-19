@@ -1,4 +1,5 @@
 const path = require('path')
+const logger = require('../Logs/winston')
 require('dotenv').config({
     path: path.resolve(__dirname, '../.env')
   })
@@ -32,7 +33,7 @@ function sendWhatsapp(user, arrayArticulos, precioTotal){
             from: process.env.TWILIO_FROM,       
             to: process.env.TWILIO_TO
         }) 
-        .then(message => console.log(message.sid)) 
+        .then(message => logger.info(`Mensaje de Whatsapp enviado, Código: ${message.sid}`)) 
         .done()
     }
 

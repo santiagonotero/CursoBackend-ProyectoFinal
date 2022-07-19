@@ -1,8 +1,10 @@
 const LocalStrategy = require('passport-local').Strategy
-const passport = require('passport')
+// const multer = require('multer')
+// const uploadFile = multer({dest: '/Avatares'})
 const Usuarios = require('../model/usuarios')
 const Carrito = require('../model/carrito')
 const MailSender = require('../notifications/email')
+const multerStorage = require('../multer')
 
 module.exports = (passport) =>{
 
@@ -21,7 +23,7 @@ module.exports = (passport) =>{
     
           // obtener el usuario
           const user = await Usuarios.getByEmail(email)
-    
+          Usuarios.data = user
           done(null, user)
         } 
           catch (e) {
@@ -30,8 +32,8 @@ module.exports = (passport) =>{
       }
 
     const registerUser = async (req, email, password, done) => {
-      const { nombre, edad, direccion, telefono } = req.body
-      const avatar = req.file.filename
+      const { nombre, apellido, telefono } = req.body
+      const avatar = ''
       try {
         // Verificar que no exista el email
         if (await Usuarios.existsByEmail(email)) {
@@ -39,24 +41,19 @@ module.exports = (passport) =>{
           return done(null, false, { message: 'user already exists!' })
         }
 
-        const nuevoCarrito = await Carrito.crearCarrito()
-        const idCarrito = nuevoCarrito._id
-        // guardar usuario en db
         const user = await Usuarios.agregarUsuario({
-        //const user = await Usuarios.save({
           email,
           password,
           nombre,
-          edad,
-          direccion,
+          apellido,
           telefono,
-          avatar,
-          idCarrito
+          avatar
         })
+        Usuarios.data = user
 
         //Enviar email al usuario informando de su registro exitoso
 
-        const mailInfo = await MailSender.newUserMail(nombre, edad, direccion, telefono, email)
+        const mailInfo = await MailSender.newUserMail(nombre, apellido, telefono, email)
   
         done(null, {
           ...user,
@@ -78,11 +75,10 @@ module.exports = (passport) =>{
         id: user._id.toString(),
         email: user.email,
         nombre: user.nombre,
-        idCarrito: user.idCarrito, 
-        direccion: user.direccion,
+        apellido: user.apellido,
+        password: user.password, 
         telefono: user.telefono,
-        avatar: user.avatar,
-        edad: user.edad,
+        avatar: user.avatar
                     }
             )
         }

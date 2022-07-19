@@ -29,7 +29,7 @@ class MailSender {
     let msgBody = `<h1>Felicitaciones!!! Un cliente ha efectuado una nueva compra en tu comercio online</h1>
     <p>Hola!!! Tenemos buenas noticias para tí!!!. Un cliente acaba de efectuar una compra en el sitio web. Te damos los detalles de esta compra:</p>
     <ul>
-        <li>Nombre del cliente: ${user.nombre} </li>
+        <li>Nombre del cliente: ${user.nombre} ${user.apellido}</li>
         <li>Dirección: ${user.direccion}</li>
         <li>Teléfono: ${user.telefono}</li> 
         <li>Email: ${user.email}</li>
@@ -57,7 +57,7 @@ class MailSender {
     const response = await this.transporter.sendMail(mailOptions)
   }
 
-  async newUserMail(nombre, edad, direccion, telefono, email) {
+  async newUserMail(nombre, apellido, edad, direccion, telefono, email) {
     const mailOptions = {
       from: "Notificaciones <contacto@tiendavirtual.com>",
       subject: "Nuevo usuario registrado",
@@ -65,7 +65,7 @@ class MailSender {
       html: `<h1>Nuevo usuario registrado</h1>
         <p>Se acaba de registrar un nuevo usuario. Sus datos son los siguientes:</p>
         <ul>
-        <li>Nombre: ${nombre}</li>
+        <li>Nombre: ${nombre} ${apellido}</li>
         <li>Edad: ${edad}</li>
         <li>Direccion de correo electrónico: ${email}</li>
         <li>Domicilio: ${direccion}</li>
