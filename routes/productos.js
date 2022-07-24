@@ -25,16 +25,19 @@ routerProductos.get('/:id', async (req, res) => {
     }
 })
 
-routerProductos.post('/', async (req, res) => {
+routerProductos.post('/categoria/:categoria', async (req, res) => {
+    console.log('POST -> Categoría')
+    console.log(req.params.categoria)
+    const filtrado = await Productos.buscarPorCategoria(req.params.categoria)
+    res.redirect(200, `/categoria/${req.params.categoria}`, {layout: 'index', inventario:filtrado, nombre: req.user.nombre })
+})
 
-    if(administrador) {
-        let {body} = req
-        Productos.agregarProducto(body)
-        res.sendStatus(200)
-    }
-    else{
-        res.send({ error: -1, descripcion: "ruta '/', método POST no autorizada"}).status(401)
-    }
+routerProductos.get('/categoria/:categoria', async (req, res) => {
+    const filtrado = await Productos.buscarPorCategoria(req.params.categoria)
+    filtrado.map((item)=>{
+        item._id = item._id.toString()
+    })
+    res.status(200).json(filtrado)
 })
 
 routerProductos.put('/:id', async (req, res) => {

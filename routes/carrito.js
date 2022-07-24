@@ -3,7 +3,6 @@ const logger = require("../Logs/winston")
 const routerCarrito = Router()
 const Carrito = require ('../model/carrito')
 const Productos = require ('../model/productos')
-const sendWhatsapp = require('../notifications/whatsapp')
 const MailSender = require('../notifications/email')
 
 routerCarrito.post('/', async (req,res)=>{
@@ -12,7 +11,7 @@ routerCarrito.post('/', async (req,res)=>{
 })
 
 routerCarrito.get('/:id/productos', async (req,res)=>{   //Me permite listar todos los productos guardados en el carrito
-
+    console.log(req.params.id)
     await Carrito.leerCarrito(req.params.id)
     try{
         if(Carrito.data.length){
@@ -33,11 +32,8 @@ routerCarrito.delete('/:id', async (req,res)=>{
 })
 
 routerCarrito.post('/:id/productos', async (req,res)=>{
-
-    const idCarrito = req.user.idCarrito
-    
     try{
-        await Carrito.agregarProducto(req.params.id, idCarrito)//, ...body)
+        await Carrito.agregarProducto(req.params.id, req.user.email)
         res.sendStatus(201)
     }
     catch(err){
@@ -51,7 +47,7 @@ routerCarrito.post('/:id/productos', async (req,res)=>{
 })
 
 routerCarrito.delete('/:id/productos/:id_prod', async (req,res)=>{
-    const {id, id_prod} = req.params
+    const {id} = req.params
     try{
         let listadoCarrito = await Carrito.leerProductos(id) //Cargo los artículos del carrito del
 
@@ -69,28 +65,22 @@ routerCarrito.delete('/:id/productos/:id_prod', async (req,res)=>{
 
 routerCarrito.post('/finalizarcompra', async(req, res) => {
 
-    const listaCarrito = {...await Carrito.leerCarrito(req.user.idCarrito)}
-    const listaArticulos = listaCarrito[0].productos
-    let arrayArticulos =[]
+    const carrito = await Carrito.leerCarrito(req.user.email)
+    let listaArticulos = {...carrito}[0].productos     
+    let pedidoArticulos = []
     let precioTotal = 0
-    
     for(let i=0; i<listaArticulos.length; i++) {
-        const detalleProducto = {...await Productos.leerProducto(listaArticulos[i])}
-        arrayArticulos.push({nombre: detalleProducto[0].nombre, precio: detalleProducto[0].precio, codigo: listaArticulos[i]})
-        precioTotal +=JSON.parse(detalleProducto[0].precio)
+        const detalleProducto = {...await Productos.leerProducto(listaArticulos[i].item)}
+        pedidoArticulos.push({nombre: detalleProducto[0].nombre, precio: detalleProducto[0].precio * listaArticulos[i].cantidad, cantidad: listaArticulos[i].cantidad, codigo: detalleProducto[0].codigo})
+        precioTotal +=JSON.parse(pedidoArticulos[i].precio)
     } 
     
     const usuario =req.user
+    MailSender.nuevaCompra(usuario, pedidoArticulos, precioTotal)
     
-    //Mandar mensaje por sms y whatsapp
-    //sendWhatsapp(usuario, arrayArticulos, precioTotal)
-    
-    //Enviar notificación por mail al administrador
-    MailSender.nuevaCompra(usuario, arrayArticulos, precioTotal)
-    
-    await Carrito.vaciarCarrito(req.user.idCarrito)
+    await Carrito.vaciarCarrito(req.user.email)
 
-    res.redirect("/cartok")
+    res.redirect(200, '/cartok', {render: 'cartok'})
 })
 
 module.exports = routerCarrito

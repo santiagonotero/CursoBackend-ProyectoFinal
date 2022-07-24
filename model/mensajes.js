@@ -20,13 +20,14 @@ class Mensajes {
     async agregarMensaje(obj){
 
         const nuevoMsg = await this.model.create(obj)
+        this.data.push(nuevoMsg)
         return nuevoMsg
     }
 
     async cargarMensajes(){
 
         this.data = await this.model.find({}).lean()
-        return true
+        return this.data
     }
 
 }

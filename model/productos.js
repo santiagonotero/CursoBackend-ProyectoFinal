@@ -25,7 +25,21 @@ class Producto {
     async agregarProducto(obj){
 
         const producto = await this.model.create(obj)
+        this.data.push(producto)
         return producto
+    }
+
+    async buscarPorCategoria(categoria){
+
+        let productos
+        if(categoria !== 'todas'){
+            productos = await this.model.find({categoria}).lean()
+        }
+        else{
+            productos = await this.model.find({}).lean()
+        }
+        this.data = productos
+        return productos
     }
 
     async reemplazarProducto(id_prod, obj){
@@ -40,17 +54,18 @@ class Producto {
 
     }
 
-    async leerProducto(codigoProducto){//params){    
+    async leerProducto(idProducto){//params){    
 
         //this.data = await this.model.find({id:params.id}).lean()
 
-        return await this.model.find({codigo: codigoProducto}).lean()
+        return await this.model.find({_id:idProducto}).lean()
         
     }
 
     async readData(){
 
         this.data = await this.model.find({}).lean()
+        return this.data
     }
 
 }

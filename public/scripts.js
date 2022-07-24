@@ -36,35 +36,15 @@ async function addNewUser(e){
 }    
 
 async function addToCart(idProducto){
-
-    const res = await fetch(`/api/carrito/${idProducto}/productos`, { method: 'POST' })
-
+    const res = await fetch(`/carrito/${idProducto}/productos`, {method: 'POST'}).then(()=>{
+        return false
+    })
 }
 
 async function finalizarCompra(){
 
-    const res = await fetch(`/api/carrito/finalizarcompra`, { method: 'POST' })
+    const res = await fetch(`/carrito/finalizarcompra`, {method: 'POST', headers:{'Content-Type': 'application/json'}})
 }
-
-// socket.on('server:productList', (items)=>{
-//     let plantilla=document.getElementById('plantillaProductos').innerHTML
-//     let compile = Handlebars.compile(plantilla)
-//     let result = compile({items})
-//     let listado=document.getElementById("listado")
-//     listado.innerHTML = result
-// })
-
-socket.on('loadMessages', (messages)=>{
-    console.log(messages)
-    let plantillaChat=document.getElementById('plantillaChat').innerHTML
-    console.log(plantillaChat)
-    let compile = Handlebars.compile(plantillaChat)
-    let result = compile({messages})
-    console.log({messages})
-    console.log(result)
-    let messagePool=document.getElementById('messagePool')
-    messagePool.innerHTML = result
-})
 
 addMessage=(e)=>{
     let globalEmail = 'santiagonotero@gmail.com'

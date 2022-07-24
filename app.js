@@ -15,11 +15,11 @@ const logger = require("./Logs/winston");
 const numCPUs = require ('os').cpus().length;
 const {engine} = require ('express-handlebars');
 const Mensajes = require('./model/mensajes');
+const Productos = require ('./model/productos')
 const homeRouter= require('./routes/home');
 const cartRouter = require('./routes/carrito');
 const productRouter = require('./routes/productos');
 const initializePassport=require('./middlewares/passport');
-//const {port} = require('./config')
 require('dotenv').config({
   path: path.resolve(__dirname, '.env')
 })
@@ -49,7 +49,7 @@ function iniciarMain(){
 
         store:new MongoStore({
           mongoUrl: `${SCHEMA}://${USER}:${PASSWORD}@${HOSTNAME}/${DATABASE}?${OPTIONS}`,
-          expires: 1000*60*30, // Tiempo de expiración: 30 minutos
+          expires: 1000*60*60, // Tiempo de expiración: 60 minutos
           createdAt: new Date(),
           autoRemove: 'native',
           autoRemoveInterval: 1,
@@ -64,30 +64,50 @@ function iniciarMain(){
       app.use(passport.session())
 
       app.use('/', homeRouter)
-      app.use('/api/carrito', cartRouter)
-      app.use('/api/productos', productRouter)
+      app.use('/carrito', cartRouter)
+      app.use('/productos', productRouter)
 
-      app.set('view engine', 'hbs')
+      app.set('view engine', '.hbs')
     
-      app.engine('hbs',engine({
+      app.engine('.hbs',engine({
         layoutsDir: path.join(__dirname,'/views'),
-        extname: 'hbs',
+        extname: '.hbs',
         defaultLayout:''
       }))
 
       io.on("connection", (socket)=>{
         
-        logger.info("Iniciando sockets")
-        Mensajes.cargarMensajes().then(()=>{
-          socket.emit("loadMessages", {...Mensajes.data})
+        Productos.readData().then((listaProductos)=>{
+          Mensajes.cargarMensajes().then((listaMensajes)=>{
+            socket.emit('server:productList', listaProductos)
+            socket.emit("loadMessages", listaMensajes)
+          })
+        })
+
+        socket.on("requestAllMessages", ()=>{
+      
+          io.sockets.emit("loadMessages", Mensajes.data)
+        })
+
+        socket.on('new-product', (prodInfo)=>{ //Mensaje que indica un nuevo producto agregado al stock de productos
+          prodInfo.precio = JSON.parse(prodInfo.precio)
+          Productos.agregarProducto(prodInfo).then(()=>{ // Almacenar nuevo producto en la base de datos
+            Productos.readData().then((listaProductos)=>{             // Cargar el listado actualizado de productos
+              io.sockets.emit('server:productList', listaProductos)
+            })
+          })
+        })
+
+        socket.on('loadProducts', (categoria)=>{
+          Productos.buscarPorCategoria(categoria).then((listaFiltrada)=>{
+              io.sockets.emit('server:productList', listaFiltrada)
+          })
         })
 
         socket.on('newMessage', (data)=>{  // Mensaje que indica un nuevo mensaje de chat recibido
-          console.log('Nuevo mensaje: ', data)
-          Mensajes.agregarMensaje(data).then(()=>{  // Almacenar mensaje en la base de datos
-            Mensajes.data.push(data)
+          Mensajes.agregarMensaje(data).then((newMsg)=>{  // Almacenar mensaje en la base de datos
+            io.sockets.emit("loadMessages", Mensajes.data)
           })
-          io.sockets.emit("loadMessages", {...Mensajes.data})
         })
       })
 
@@ -97,7 +117,7 @@ function iniciarMain(){
   })        
 
   .catch((err)=>{
-          logger.error("error en Mongoooo", err)
+          logger.error("error en Mongo", err)
   })
 
 }

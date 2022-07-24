@@ -19,52 +19,51 @@ class Carrito {
     }
 
 
-    async leerCarrito(id_carrito){
-
-        const carrito = await this.model.find({_id:mongoose.Types.ObjectId(id_carrito)},{}).lean()
+    async leerCarrito(email){
+        const carrito = await this.model.find({email})
         this.data = carrito
         return carrito
     }
 
-    async crearCarrito(){
-
-        const ultimoId = await this.model.countDocuments()+1
-        const nuevoCarrito = await this.model.create({productos:[], timestamp: Date.now()})
+    async crearCarrito(email){
+        const nuevoCarrito = await this.model.create({productos:[], timestamp: Date.now(), email})
         return nuevoCarrito
     }
 
-    async agregarProducto(idProducto, idCarrito){  //, Producto){
-
-        const carritoBuscado = await this.model.find({_id:idCarrito},{}).lean()
-
-        carritoBuscado.filter(async (articulos)=>{
-            let listaCarrito = articulos.productos
-
-            if (!articulos.productos.cantidad){
-                await this.model.findByIdAndUpdate({_id: idCarrito}, {$push: {productos: idProducto, cantidad: 1}})
-            }
-            else{
-                const nuevaCantidad = articulos.productos.cantidad + 1
-                await this.model.findByIdAndUpdate({_id: idCarrito}, {$push: {productos: idProducto, cantidad: nuevaCantidad}})
-
-            }
-        })
+    async agregarProducto(idProducto, email){
+        const carritoBuscado = await this.model.find({email},{}).lean()
+        let listaArticulos = carritoBuscado[0].productos
+        const articulo = listaArticulos.findIndex(element =>element.item === idProducto)
+        if(articulo !== -1){
+            console.log('articulo existe')
+            carritoBuscado[0].productos[articulo].cantidad++
+            await this.model.findOneAndUpdate({email}, {productos: carritoBuscado[0].productos})
+            return true
+        }
+        else{
+            console.log('No existe articulo')
+            carritoBuscado[0].productos.push({item: idProducto, cantidad:1})
+            await this.model.findOneAndUpdate({email}, {productos: carritoBuscado[0].productos})
+            return false
+        }
     }
+        
+    
 
     async eliminarCarrito(idCarrito){
         await this.model.deleteOne({_id:idCarrito})
     }
 
-    async vaciarCarrito(idCarrito){
-        const carritoBuscado = await this.model.find({_id:mongoose.Types.ObjectId(idCarrito)},{}).lean()
+    async vaciarCarrito(email){
+        const carritoBuscado = await this.model.find({email},{}).lean()
         const totalItems = {...carritoBuscado}
-        await this.model.findOneAndUpdate({_id:mongoose.Types.ObjectId(idCarrito)},{productos: []}) 
+        await this.model.findOneAndUpdate({email}, {productos: []}) 
 
     }
 
-    async eliminarProducto(idCarrito, idProducto){
+    async eliminarProducto(email, idProducto){
 
-        let listaProd = await this.model.find({_id:idCarrito},{productos}).lean()
+        let listaProd = await this.model.find({email},{productos}).lean()
         for(let prod of listaProd){
             if (prod.id === idProducto){
                 prod.delete()

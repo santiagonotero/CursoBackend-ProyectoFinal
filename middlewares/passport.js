@@ -50,11 +50,10 @@ module.exports = (passport) =>{
           avatar
         })
         Usuarios.data = user
-
+        // Se crea un carrito asociado a ese email
+        await Carrito.crearCarrito(user.email)
         //Enviar email al usuario informando de su registro exitoso
-
         const mailInfo = await MailSender.newUserMail(nombre, apellido, telefono, email)
-  
         done(null, {
           ...user,
           id: user._id
@@ -82,6 +81,5 @@ module.exports = (passport) =>{
                     }
             )
         }
-    )
-    
+    )  
 }
