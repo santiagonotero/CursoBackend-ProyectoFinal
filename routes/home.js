@@ -1,12 +1,6 @@
 const {Router} = require ('express')
 const {auth} = require ('../middlewares/auth')
-const passport=require('passport')
-const logger = require("../Logs/winston")
 const homeRouter = Router()
-const CPUS = require("os").cpus().length
-const Productos = require ('../model/productos')
-const Usuario = require('../model/usuarios')
-const Mensajes = require('../model/mensajes')
 const homeMethods = require('../model/home.methods')
 
 homeRouter.get('/api/currentuser', homeMethods.getCurrentUser)
