@@ -1,6 +1,4 @@
-const path = require ('path')
 const mongoose = require('mongoose')
-//const fs = require ('fs/promises')
 
 class Producto {
 
@@ -54,9 +52,7 @@ class Producto {
 
     }
 
-    async leerProducto(idProducto){//params){    
-
-        //this.data = await this.model.find({id:params.id}).lean()
+    async leerProducto(idProducto){ 
 
         return await this.model.find({_id:idProducto}).lean()
         

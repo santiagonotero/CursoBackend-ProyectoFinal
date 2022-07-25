@@ -1,7 +1,4 @@
-const path = require ('path')
 const mongoose = require('mongoose')
-const fs = require ('fs/promises')
-
 
 class Carrito {
 
@@ -47,17 +44,13 @@ class Carrito {
             return false
         }
     }
-        
-    
 
     async eliminarCarrito(idCarrito){
         await this.model.deleteOne({_id:idCarrito})
     }
 
     async vaciarCarrito(email){
-        const carritoBuscado = await this.model.find({email},{}).lean()
-        const totalItems = {...carritoBuscado}
-        await this.model.findOneAndUpdate({email}, {productos: []}) 
+        await this.model.findOneAndUpdate({email}, {productos: []}).lean()
 
     }
 

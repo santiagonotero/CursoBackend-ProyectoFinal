@@ -25,7 +25,6 @@ require('dotenv').config({
 })
 
 const PORT = process.envPORT || 8080
-let messagePool={}  // Mensajes del canal de chat
 
 function iniciarMain(){
   // Conexión a MongoDB
@@ -62,7 +61,6 @@ function iniciarMain(){
 
       app.use(passport.initialize())
       app.use(passport.session())
-
       app.use('/', homeRouter)
       app.use('/carrito', cartRouter)
       app.use('/productos', productRouter)
@@ -124,9 +122,7 @@ function iniciarMain(){
 
 
 const { HOSTNAME, SCHEMA, DATABASE, USER, PASSWORD, OPTIONS } = require("./DBconfig/Mongo")
-
 const args = yargs.default({ PORT: 8080, mode:'fork'}).argv
-
 if(args.mode ==='cluster'){   //Si el modo es Cluster...
   
   logger.info('modo CLUSTER')

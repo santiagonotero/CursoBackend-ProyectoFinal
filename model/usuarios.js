@@ -23,7 +23,6 @@ class Usuario {
         
     }
 
-      // guardar usuario
   async save(obj) {
     obj.password = await bcrypt.hash(obj.password, 10)
     return await this.model.create(obj)
@@ -35,8 +34,6 @@ class Usuario {
         return await this.model.create(obj)
     }
 
-      // existe por email
-
     existsByEmail(email) {
         return this.model.exists({ email })
     }
@@ -45,7 +42,6 @@ class Usuario {
         return await this.model.findById(id)
     }
 
-    // obtener un usuario por email
     async getByEmail(email) {
         const user = await this.model.findOne({ email })
 
@@ -62,8 +58,6 @@ class Usuario {
         }
     }
 
-    // checa que las passwords coincidan
-    // regresa true o false
     async isPasswordValid(email, pwd) {
         const user = await this.model.findOne({ email })
         return await bcrypt.compare(pwd, user.password)
@@ -90,8 +84,6 @@ class Usuario {
           })
         })
       }
-
-
 }
 
 module.exports = new Usuario() 
