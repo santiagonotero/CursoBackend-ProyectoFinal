@@ -42,8 +42,11 @@ async function addToCart(idProducto){
 }
 
 async function finalizarCompra(){
-
     const res = await fetch(`/carrito/finalizarcompra`, {method: 'POST', headers:{'Content-Type': 'application/json'}})
+}
+
+async function filtrarEmail(email){
+    await fetch(`/chat/${email}`, {method: 'POST', headers:{'Content-Type': 'application/json'}})
 }
 
 addMessage=(e)=>{

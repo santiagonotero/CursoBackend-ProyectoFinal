@@ -1,47 +1,31 @@
 <!DOCTYPE html>
 <html>
 {{>header}}
-    
     <title>Chat en línea</title>
     {{>navbar}}
         <h1>Mensajes de todos los usuarios</h1>
         <body>
+            <div> 
+                <div id="messagePool" ></div>
+                <form onsubmit ="addMessage(this); return false">
+                    <div>
+                        <label for="userMessage">Mensaje</label>
+                        <input name="userMessage" id="userMessage" type="text">
+                    </div>
+                    <div>
+                        <button type="submit">Enviar Mensaje</button>
+                    </div>
+                </form>
+                {{!-- <a href='/chat/{{{userEmail}}}'>Ver sólo mis mensajes</a> --}}
             <div>
-                <script id="plantillaChat" type="text/x-handlebars-template" >
-                <div>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Autor</th>
-                                <th>Mensaje</th>
-                                <th>Fecha</th>
-                                <th>Hora</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {{#each messages}}
-                            <tr>
-                                <td><p>{{this.email}}</p></td>
-                                <td><p>{{this.mensaje}}</p></td>
-                                <td><p>{{this.fecha}}</p></td>
-                                <td><p>{{this.hora}}</p></td>
-                            </tr>
-                            {{/each}}
-                        </tbody>
-                    </table> 
-                </div>
-            </script>
-        <div id="messagePool" ></div>
-        <a href='/chat/{{{userEmail}}}'>Ver sólo mis mensajes</a>
-            <form onsubmit ="addMessage(this); return false">
-                <div>
-                    <label for="userMessage">Mensaje</label>
-                    <input name="userMessage" id="userMessage" type="text">
-                </div>
-                <div>
-                    <button type="submit">Enviar Mensaje</button>
-                </div>
-            </form>
+                <label for="messageSelect">Ver los mensajes de un sólo usuario:</label>
+                <select name="messageSelect" id="categoria">
+                    {{#each emailList}}
+                        <option value="{{this}}">{{this}}</option>
+                    {{/each}}
+                </select>
+                <input type="submit" onclick="filtrarEmail(categoria.value)" value="Filtrar">Filtrar</input>
+            </div>
         </body>
     <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
     <script src="/static/scripts.js"></script>

@@ -4,6 +4,7 @@ const passport=require('passport')
 const Productos = require ('../model/productos')
 const Usuario = require('../model/usuarios')
 const Mensajes = require('../model/mensajes')
+const email = require("../notifications/email")
 
 module.exports = {
     getCurrentUser: (req, res)=>{
@@ -68,14 +69,36 @@ module.exports = {
     getChat: async (req, res)=>{
             await Mensajes.cargarMensajes()
             const messages = Mensajes.data
-            res.render('chat', { layout:'chat', userEmail: req.user.email})
+            let emailList=[]
+            let isFound = false 
+            if(messages){
+               for(let i = 0 ; i < messages.length ; i++){
+                    for(let j = 0 ; j < emailList.length ; j++){
+                        if(emailList[j] === messages[i].email){
+                            isFound = true
+                        }
+                    }
+                    if(isFound === false){
+                        emailList.push(messages[i].email)
+                    }
+               }
+               isFound = false
+            }
+            res.render('chat', { layout:'chat', emailList, userEmail: req.user.email})
         },
+    postChatEmail: (req, res) => {
+        //res.redirect('/chat/:email')
+        res.redirect(`/chat/${req.params.email}`)
+    },
     getChatEmail: async (req, res)=>{
+        console.log('getChatEmail')
+        console.log(req.params.email)
             await Mensajes.cargarMensajes()
-            const messages = Mensajes.data.filter(msg =>{if((msg.email === req.params.email) || (msg.tipo ==='sistema')){
+            const messages = Mensajes.data.filter(msg =>{if(msg.email === req.params.email){
                     return msg 
                 }
             })
+            console.log(messages)
             res.render('emailchat', { layout:'emailchat', messages})
         }
 }

@@ -14,19 +14,6 @@
             </select>
         </div>
         <div id="listadoProductos" ></div>
-        <script id="plantillaProductos" type="text/x-handlebars-template">
-            <div>
-                <ul>{{#each inventario}}
-                    <li><h2>{{this.nombre}}</h2></li>
-                    <li><p>{{this.descripcion}}</p></li>
-                    <li><p>Código: {{this._id}}</p></li>
-                    <li><img src={{this.foto}} /></li>
-                    <li> <p>Precio: ARS{{this.precio}}</p></li>
-
-                    <button onclick=addToCart("{{this._id}}")>Agregar al carrito</button>
-                {{/each}}</ul>
-            </div>
-        </script>
     </body>
     <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
     <script src="/static/scripts.js"></script>

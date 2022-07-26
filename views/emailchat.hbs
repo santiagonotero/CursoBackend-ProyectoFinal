@@ -6,32 +6,7 @@
     {{>navbar}}
         <h1>Mensajes particulares</h1>
         <body>
-            <div>
-                <script id="plantillaChat" type="text/x-handlebars-template" >
-                <div>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Autor</th>
-                                <th>Mensaje</th>
-                                <th>Fecha</th>
-                                <th>Hora</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {{#each messages}}
-                            <tr>
-                                <td><p>{{this.email}}</p></td>
-                                <td><p>{{this.mensaje}}</p></td>
-                                <td><p>{{this.fecha}}</p></td>
-                                <td><p>{{this.hora}}</p></td>
-                            </tr>
-                            {{/each}}
-                        </tbody>
-                    </table> 
-                </div>
-            </script>
-        <div id="messagePool" ></div>
+            <div id="messagePool" ></div>
             <form onsubmit ="addMessage(this); return false">
                 <div>
                     <label for="userMessage">Mensaje</label>
