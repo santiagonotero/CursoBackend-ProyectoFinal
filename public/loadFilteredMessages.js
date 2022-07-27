@@ -10,7 +10,7 @@ const plantillaChat = `
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {{#each messages}}
+                                    {{#each filteredMessages}}
                                     <tr>
                                         <td><p>{{this.email}}</p></td>
                                         <td><p>{{this.mensaje}}</p></td>
@@ -25,19 +25,20 @@ const plantillaChat = `
 
 async function getUserEmail(){
 
-    const email = 'santiagonotero@gmail.com'
-    console.log(email)
-    return email
+    const query = await fetch('/api/currentuser')
+    const response = await query.json()
+    console.log(response)
+    return response.email
 }
 
-socket.on('loadMessages', (messages)=>{
+socket.on('loadMessages', (filteredMessages)=>{
     let plantilla= plantillaChat 
     let compiler = Handlebars.compile(plantilla)
-    let result = compiler({messages})
+    let result = compiler({filteredMessages})
     let messagePool=document.getElementById('messagePool')
     messagePool.innerHTML = result
 })
 
-const email = getUserEmail()
-
-socket.emit("requestMessages", email)
+getUserEmail().then((email)=>{
+    socket.emit("requestMessages", email)
+})

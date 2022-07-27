@@ -82,10 +82,9 @@ function iniciarMain(){
           })
         })
 
-        socket.on("requestMessages", (email)=>{
-      
-          Mensajes.cargarMensajes(email)
-          io.sockets.emit("loadMessages", Mensajes.data)
+        socket.on("requestMessages", async (email)=>{
+          const listaMensajes = await Mensajes.cargarMensajes(email)
+          io.sockets.emit("loadMessages", listaMensajes)
         })
 
         socket.on('new-product', (prodInfo)=>{ //Mensaje que indica un nuevo producto agregado al stock de productos

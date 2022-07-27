@@ -23,10 +23,9 @@ class Mensajes {
         return nuevoMsg
     }
 
-    async cargarMensajes(email){
-
-        if(email){
-            this.data = await this.model.find({email:email}).lean()
+    async cargarMensajes(msgEmail){
+        if(msgEmail){
+            this.data = await this.model.find({email: msgEmail}).exec()
         }
         else{
             this.data = await this.model.find({}).lean()

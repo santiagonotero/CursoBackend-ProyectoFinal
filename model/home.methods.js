@@ -87,8 +87,7 @@ module.exports = {
         res.redirect(200, `/chat/${req.params.email}`)
     },
     getChatEmail: async (req, res)=>{
-            console.log('getChatEmail')
             const messages = await Mensajes.cargarMensajes(req.params.email)
-            res.render('emailchat', { layout:'emailchat', messages: messages, userEmail: req.params.email })
+            res.render('emailchat', { layout:'emailchat', filteredMessages: messages, userEmail: req.params.email })
         }
 }
