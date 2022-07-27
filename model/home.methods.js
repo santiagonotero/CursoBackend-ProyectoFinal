@@ -57,15 +57,12 @@ module.exports = {
     getSignup: (req, res) => {
             res.render('signup')
         },
-    postSignup: ()=>{
+    postSignup:
             passport.authenticate('signup', {
             successRedirect: "/",
             failureRedirect: "/signup",
             failureFlash: false
-            }), (req, res)=>{
-                res.redirect('/')
-            }
-        },
+            }), 
     getChat: async (req, res)=>{
             await Mensajes.cargarMensajes()
             const messages = Mensajes.data
@@ -84,21 +81,14 @@ module.exports = {
                }
                isFound = false
             }
-            res.render('chat', { layout:'chat', emailList, userEmail: req.user.email})
+            res.render('chat', { layout:'chat', emailList, messages, userEmail: req.user.email})
         },
     postChatEmail: (req, res) => {
-        //res.redirect('/chat/:email')
-        res.redirect(`/chat/${req.params.email}`)
+        res.redirect(200, `/chat/${req.params.email}`)
     },
     getChatEmail: async (req, res)=>{
-        console.log('getChatEmail')
-        console.log(req.params.email)
-            await Mensajes.cargarMensajes()
-            const messages = Mensajes.data.filter(msg =>{if(msg.email === req.params.email){
-                    return msg 
-                }
-            })
-            console.log(messages)
-            res.render('emailchat', { layout:'emailchat', messages})
+            console.log('getChatEmail')
+            const messages = await Mensajes.cargarMensajes(req.params.email)
+            res.render('emailchat', { layout:'emailchat', messages: messages, userEmail: req.params.email })
         }
 }

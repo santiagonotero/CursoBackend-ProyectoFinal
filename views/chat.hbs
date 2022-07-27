@@ -7,7 +7,7 @@
         <body>
             <div> 
                 <div id="messagePool" ></div>
-                <form onsubmit ="addMessage(this); return false">
+                <form onsubmit ="addMessage(); return false">
                     <div>
                         <label for="userMessage">Mensaje</label>
                         <input name="userMessage" id="userMessage" type="text">
@@ -16,16 +16,8 @@
                         <button type="submit">Enviar Mensaje</button>
                     </div>
                 </form>
-                {{!-- <a href='/chat/{{{userEmail}}}'>Ver sólo mis mensajes</a> --}}
+                <a href='/chat/{{{userEmail}}}'>Ver sólo mis mensajes</a>
             <div>
-                <label for="messageSelect">Ver los mensajes de un sólo usuario:</label>
-                <select name="messageSelect" id="categoria">
-                    {{#each emailList}}
-                        <option value="{{this}}">{{this}}</option>
-                    {{/each}}
-                </select>
-                <input type="submit" onclick="filtrarEmail(categoria.value)" value="Filtrar">Filtrar</input>
-            </div>
         </body>
     <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
     <script src="/static/scripts.js"></script>

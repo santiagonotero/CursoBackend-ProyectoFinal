@@ -6,8 +6,8 @@
         <h1>¿Aún no estás registrado?</h1>
         <p>Completa estos datos para crear tu cuenta</p>
         <div>
-            {{!--action="/signup" method="POST"     --}}
-            <form id="formUsuario" onSubmit="return addNewUser(this)" enctype="multipart/form-data"/>
+            {{!--action="/signup" method="POST"   enctype="multipart/form-data"/   --}}
+            <form id="formUsuario" onSubmit="addNewUser(this)">
                 <input name="nombre" id="nombre" type="text" placeholder="Nombre" />
                 <input name="apellido" id="apellido" type="text" placeholder="Apellido" />
                 <input name="telefono" id="telefono" type="tel" placeholder="Teléfono" />

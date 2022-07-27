@@ -82,8 +82,9 @@ function iniciarMain(){
           })
         })
 
-        socket.on("requestAllMessages", ()=>{
+        socket.on("requestMessages", (email)=>{
       
+          Mensajes.cargarMensajes(email)
           io.sockets.emit("loadMessages", Mensajes.data)
         })
 

@@ -7,17 +7,8 @@
         <h1>Mensajes particulares</h1>
         <body>
             <div id="messagePool" ></div>
-            <form onsubmit ="addMessage(this); return false">
-                <div>
-                    <label for="userMessage">Mensaje</label>
-                    <input name="userMessage" id="userMessage" type="text">
-                </div>
-                <div>
-                    <button type="submit">Enviar Mensaje</button>
-                </div>
-            </form>
         </body>
     <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
     <script src="/static/scripts.js"></script>
-    <script src="/static/loadMessages.js"></script>
+    <script src="/static/loadFilteredMessages.js"></script>
 </html>

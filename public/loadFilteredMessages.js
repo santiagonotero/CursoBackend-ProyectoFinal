@@ -1,5 +1,3 @@
-let userEmail
-
 const plantillaChat = `
                         <div>
                             <table>
@@ -26,24 +24,11 @@ const plantillaChat = `
                         `
 
 async function getUserEmail(){
-    const query = await fetch('/api/currentuser', {headers: {'Content-Type': 'application/json'}})
-    const response = await query.json()
-    return await response.email
-}
 
-userEmail = getUserEmail()
-
-
-async function filtrarEmail(email){
+    const email = 'santiagonotero@gmail.com'
     console.log(email)
-    const query = await fetch(`/chat/${email}`, {method: 'POST', headers:{'Content-Type': 'application/json'}})
-    const response = await query.json()
-    if(response.status){
-        socket.emit("requestMessages", email)
-    }
+    return email
 }
-
-socket.emit("requestMessages")
 
 socket.on('loadMessages', (messages)=>{
     let plantilla= plantillaChat 
@@ -52,3 +37,7 @@ socket.on('loadMessages', (messages)=>{
     let messagePool=document.getElementById('messagePool')
     messagePool.innerHTML = result
 })
+
+const email = getUserEmail()
+
+socket.emit("requestMessages", email)

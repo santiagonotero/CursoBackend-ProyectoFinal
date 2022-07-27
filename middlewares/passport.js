@@ -1,10 +1,7 @@
 const LocalStrategy = require('passport-local').Strategy
-// const multer = require('multer')
-// const uploadFile = multer({dest: '/Avatares'})
 const Usuarios = require('../model/usuarios')
 const Carrito = require('../model/carrito')
 const MailSender = require('../notifications/email')
-const multerStorage = require('../multer')
 
 module.exports = (passport) =>{
 
@@ -38,6 +35,7 @@ module.exports = (passport) =>{
         // Verificar que no exista el email
         if (await Usuarios.existsByEmail(email)) {
           // regresar al usuario a la misma pantalla
+          console.log('Ya existe usuario')
           return done(null, false, { message: 'user already exists!' })
         }
 
