@@ -76,22 +76,21 @@ module.exports ={
             }
         },
     endSelling: async(req, res) => {
-        console.log('/finalizar compra')
-        const carrito = await Carrito.leerCarrito(req.user.email)
-        let listaArticulos = {...carrito}[0].productos     
-        let pedidoArticulos = []
-        let precioTotal = 0
-        for(let i=0; i<listaArticulos.length; i++) {
-            const detalleProducto = {...await Productos.leerProducto(listaArticulos[i].item)}
-            pedidoArticulos.push({nombre: detalleProducto[0].nombre, precio: detalleProducto[0].precio * listaArticulos[i].cantidad, cantidad: listaArticulos[i].cantidad, codigo: detalleProducto[0].codigo})
-            precioTotal +=JSON.parse(pedidoArticulos[i].precio)
-        } 
-        
-        const usuario =req.user
-        MailSender.nuevaCompra(usuario, pedidoArticulos, precioTotal)
-        
-        await Carrito.vaciarCarrito(req.user.email)
-    
-        res.redirect(200, '/cartok', {render: 'cartok'})
+            const carrito = await Carrito.leerCarrito(req.user.email)
+            let listaArticulos = {...carrito}[0].productos     
+            let pedidoArticulos = []
+            let precioTotal = 0
+            for(let i=0; i<listaArticulos.length; i++) {
+                const detalleProducto = {...await Productos.leerProducto(listaArticulos[i].item)}
+                pedidoArticulos.push({nombre: detalleProducto[0].nombre, precio: detalleProducto[0].precio * listaArticulos[i].cantidad, cantidad: listaArticulos[i].cantidad, codigo: detalleProducto[0].codigo})
+                precioTotal +=JSON.parse(pedidoArticulos[i].precio)
+            } 
+            const usuario =req.user
+            MailSender.nuevaCompra(usuario, pedidoArticulos, precioTotal)
+            await Carrito.vaciarCarrito(req.user.email)
+            res.redirect('/finalizarcompra')
+        },
+    getEndSelling: (req, res) => {
+            res.render('cartok', {layout:'cartok'})
     }
 }

@@ -43,12 +43,14 @@ async function addNewUser(e){
 async function addToCart(idProducto){
     const res = await fetch(`/carrito/${idProducto}/productos`, {method: 'POST'})
     const res2 = await res.json()
-    console.log(res2)
         return false
 }
 
 async function finalizarCompra(){
-    const res = await fetch(`/carrito/finalizarcompra`, {method: 'POST', headers:{'Content-Type': 'application/json'}})
+    const res = await fetch('/carrito/finalizarcompra', {method: 'POST', headers:{'Content-Type': 'application/json'}})
+    const res2 = await res.json()
+    console.log(res2)
+    window.location.href='/carrito/finalizarcompra'
 }
 
 async function addMessage(){
