@@ -1,4 +1,5 @@
 const Carrito = require ('../model/carrito')
+const Productos = require ('../model/productos')
 const MailSender = require('../notifications/email')
 const logger = require("../Logs/winston")
 
@@ -75,7 +76,7 @@ module.exports ={
             }
         },
     endSelling: async(req, res) => {
-
+        console.log('/finalizar compra')
         const carrito = await Carrito.leerCarrito(req.user.email)
         let listaArticulos = {...carrito}[0].productos     
         let pedidoArticulos = []
