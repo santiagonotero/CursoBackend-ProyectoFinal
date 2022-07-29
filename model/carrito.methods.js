@@ -19,6 +19,7 @@ module.exports ={
             }
             catch(err){
                 logger.error(err)
+                res.render('error', {layout: 'error', error: err.message}).status(200)
             }
             res.status(200)
         },
@@ -27,7 +28,6 @@ module.exports ={
             res.send(`ID del nuevo carrito : ${IdCarrito}`).status(200)
         },
     listProducts: async (req,res)=>{   //Me permite listar todos los productos guardados en el carrito
-            console.log(req.params.id)
             await Carrito.leerCarrito(req.params.id)
             try{
                 if(Carrito.data.length){
@@ -39,6 +39,7 @@ module.exports ={
             }
             catch(err){
                 logger.error(err)
+                res.render('error', {layout: 'error', error: err.message}).status(200)
             }
         },
     deleteCart: async (req,res)=>{
@@ -52,6 +53,8 @@ module.exports ={
             }
             catch(err){
                 if(err.message == 'Carrito not found'){
+                    logger.error('Error: No se encontró carrito - ' + err)
+                    res.render('error', {layout: 'error', error: err.message}).status(200)
                     res.sendStatus(404)
                 }
                 else{
@@ -68,7 +71,8 @@ module.exports ={
             }
             catch(err){
                 if(err.message === 'Carrito no encontrado'){
-                    res.sendStatus(404)
+                    logger.error('Error: No se encontró carrito - ' + err)
+                    res.render('error', {layout: 'error', error: err.message}).status(200)
                 }
                 else{
                     res.sendStatus(500)

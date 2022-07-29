@@ -2,7 +2,6 @@ const multer = require('multer')
 
 module.exports={
     uploadFile:(req,res,next)=>{
-        console.log('multer.uploadFile')
         const multerStorage = multer.diskStorage(
             { destination: (req, file, cb)=>{cb(null, 'Avatares/')},
             filename:(req, file, cb)=>{

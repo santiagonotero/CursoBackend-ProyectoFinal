@@ -36,6 +36,7 @@ async function addNewUser(e){
         }
     }
     catch(e){
+        logger.error('No se pudo agregar nuevo usuario - ' + e)
         return(e)
     }
 }    

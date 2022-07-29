@@ -4,7 +4,6 @@ const passport=require('passport')
 const Productos = require ('../model/productos')
 const Usuario = require('../model/usuarios')
 const Mensajes = require('../model/mensajes')
-const email = require("../notifications/email")
 
 module.exports = {
     getCurrentUser: (req, res)=>{
@@ -89,5 +88,8 @@ module.exports = {
     getChatEmail: async (req, res)=>{
             const messages = await Mensajes.cargarMensajes(req.params.email)
             res.render('emailchat', { layout:'emailchat', filteredMessages: messages, userEmail: req.params.email })
-        }
+        },
+    getNotFound: (req, res) =>{
+        res.render('error', {layout: 'error', error: 'ERROR: No existe esta ruta'})
+    }
 }

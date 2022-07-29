@@ -132,10 +132,3 @@ const Contenedor = class {
 
 
 let nuevoArchivo= new Contenedor('Productos.json')
-
-//nuevoArchivo.save({title:"pantalon", price:"1500", thumbnail: "___"})
-
-//nuevoArchivo.getById(2)
-///nuevoArchivo.getAll()
-//nuevoArchivo.deleteById(3)
-//nuevoArchivo.deleteAll()

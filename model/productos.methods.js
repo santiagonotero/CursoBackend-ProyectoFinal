@@ -11,7 +11,7 @@ module.exports={
             }
         },
     getProductsById: async (req, res) => {
-            await Productos.leerProducto(req.params)
+            await Productos.leerProducto(req.params.id)
             if(Productos.data.length){
                 res.send(Productos.data).status(200)
             }    
@@ -45,8 +45,9 @@ module.exports={
                     }
                 }
                 catch(err){
-                    if (err.message ='Error: Producto no encontrado'){
-                        res.send( `${err.message}`).status(200)
+                    if (err.message =='Error: Producto no encontrado'){
+                        
+                        res.render('error', {layout: 'error', error: err.message}).status(200)
                     }
                     else{
                         res.send(500)
@@ -65,5 +66,8 @@ module.exports={
             else{
                 res.send({ error: -1, descripcion: "ruta '/:id', método DELETE no autorizada"}).status(401)
             }
-        }
+        },
+    getNotFound: (req, res) =>{
+        res.render('error', {layout: 'error', error: 'ERROR: No existe esta ruta'})
+    }
 }

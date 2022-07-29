@@ -54,8 +54,8 @@ class Producto {
 
     async leerProducto(idProducto){ 
 
-        return await this.model.find({_id:idProducto}).lean()
-        
+        this.data = await this.model.find({_id:idProducto}).lean()
+        return this.data
     }
 
     async readData(){

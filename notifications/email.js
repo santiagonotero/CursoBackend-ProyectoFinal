@@ -38,9 +38,8 @@ class MailSender {
     <ul>`
 
     for(let i = 0; i < arrayArticulos.length; i++){
-        msgBody += `<li>Artículo: ${arrayArticulos[i].nombre} - Código: ${arrayArticulos[i].codigo} - Precio del artículo: ${arrayArticulos[i].precio}</li>`
+        msgBody += `<li>Artículo: ${arrayArticulos[i].nombre} - Código: ${arrayArticulos[i].codigo} -Cantidad: ${arrayArticulos.cantidad} - Precio del artículo: ${arrayArticulos[i].precio}</li>`
     }
-    
 
     msgBody += `</ul>
                 <p>El valor total de la compra es de ARS${precioTotal}</p>`
