@@ -15,6 +15,6 @@ homeRouter.get('/chat/:email', auth, homeMethods.getChatEmail)
 homeRouter.get('/signup', homeMethods.getSignup)
 homeRouter.post('/signup', homeMethods.postSignup)
 homeRouter.get('/system', homeMethods.getSystemInfo)
-homeRouter.get('*', homeMethods.getNotFound)
+//homeRouter.get('*', homeMethods.getNotFound)
 
 module.exports = homeRouter;

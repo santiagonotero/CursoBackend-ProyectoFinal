@@ -8,6 +8,6 @@ routerProductos.post('/categoria/:categoria', productsMethod.postProductsByCateg
 routerProductos.get('/categoria/:categoria', productsMethod.getProductsByCategory)
 routerProductos.put('/:id', productsMethod.putProductsById)
 routerProductos.delete('/:id', productsMethod.deleteProductById)
-routerProductos.get('*', productsMethod.getNotFound)
+//routerProductos.get('/*', productsMethod.getNotFound)
 
 module.exports = routerProductos
