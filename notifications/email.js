@@ -24,7 +24,7 @@ class MailSender {
   }
 
 
-  async nuevaCompra(user, arrayArticulos, precioTotal) {
+  async nuevaCompra(user, arrayArticulos, precioTotal, cantidades) {
 
     let msgBody = `<h1>Felicitaciones!!! Un cliente ha efectuado una nueva compra en tu comercio online</h1>
     <p>Hola!!! Tenemos buenas noticias para tí!!!. Un cliente acaba de efectuar una compra en el sitio web. Te damos los detalles de esta compra:</p>
@@ -38,7 +38,7 @@ class MailSender {
     <ul>`
 
     for(let i = 0; i < arrayArticulos.length; i++){
-        msgBody += `<li>Artículo: ${arrayArticulos[i].nombre} - Código: ${arrayArticulos[i].codigo} -Cantidad: ${arrayArticulos.cantidad} - Precio del artículo: ${arrayArticulos[i].precio}</li>`
+        msgBody += `<li>Artículo: ${arrayArticulos[i].nombre} - Código: ${arrayArticulos[i].codigo} -Cantidad: ${cantidades[i]} - Precio del artículo: ${arrayArticulos[i].precio}</li>`
     }
 
     msgBody += `</ul>

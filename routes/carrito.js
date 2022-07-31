@@ -10,6 +10,6 @@ routerCarrito.delete('/:id', cartMethods.deleteCart)
 routerCarrito.post('/:id/productos', cartMethods.addProduct)
 routerCarrito.delete('/:id/productos/:id_prod', cartMethods.deleteProduct)
 routerCarrito.get('/finalizarcompra', cartMethods.getEndSelling)
-routerCarrito.post('/finalizarcompra', cartMethods.endSelling)
+routerCarrito.post('/compraterminada', cartMethods.endSelling)
 
 module.exports = routerCarrito
