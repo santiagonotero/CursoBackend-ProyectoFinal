@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const path=require('path');
+const cors = require('cors');
 let server = require('http').Server(app);
 let io = require('socket.io')(server);
 const mongoose = require('mongoose');
@@ -61,6 +62,7 @@ function iniciarMain(){
 
       app.use(passport.initialize())
       app.use(passport.session())
+      app.use(cors({origin: 'http://localhost:8080'}))
       app.use('/', homeRouter)
       app.use('/carrito', cartRouter)
       app.use('/productos', productRouter)

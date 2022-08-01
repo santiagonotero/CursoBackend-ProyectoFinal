@@ -32,13 +32,11 @@ class Carrito {
         let listaArticulos = carritoBuscado[0].productos
         const articulo = listaArticulos.findIndex(element =>element.item === idProducto)
         if(articulo !== -1){
-            console.log('articulo existe')
             carritoBuscado[0].productos[articulo].cantidad++
             await this.model.findOneAndUpdate({email}, {productos: carritoBuscado[0].productos})
             return true
         }
         else{
-            console.log('No existe articulo')
             carritoBuscado[0].productos.push({item: idProducto, cantidad:1})
             await this.model.findOneAndUpdate({email}, {productos: carritoBuscado[0].productos})
             return false
@@ -50,7 +48,7 @@ class Carrito {
     }
 
     async vaciarCarrito(email){
-        await this.model.findOneAndUpdate({email}, {productos: []}).lean()
+        await this.model.findOneAndUpdate({email}, {productos: []})
 
     }
 

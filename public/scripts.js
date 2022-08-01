@@ -18,7 +18,7 @@ async function addNewUser(e){
             }
             const response = await fetch('/signup', { 
                 method: 'POST', 
-                //mode:"no-cors",
+                mode:"no-cors",
                 body: JSON.stringify(userData), 
                 headers: {
                     Accept: 'application/json',
@@ -26,7 +26,6 @@ async function addNewUser(e){
                 }
             })
             const result = await response.json()
-            console.log(result)
             alert('')
             return false
         }
@@ -42,16 +41,31 @@ async function addNewUser(e){
 }    
 
 async function addToCart(idProducto){
-    const res = await fetch(`/carrito/${idProducto}/productos`, {method: 'POST'})
+    const res = await fetch(`/carrito/${idProducto}/productos`, {
+        method: 'POST',
+        mode:"no-cors",
+        headers:{
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+        }
+    })
     const res2 = await res.json()
         return false
 }
 
 async function finalizarCompra(){
-    const res = await fetch('/carrito/finalizarcompra', {method: 'POST', headers:{'Content-Type': 'application/json'}})
-    const res2 = await res.json()
-    console.log(res2)
-    window.location.href='/carrito/finalizarcompra'
+    console.log('finalizarCompra')
+    const res = await fetch('/carrito/finalizarcompra', {
+        method: 'POST',
+        mode:"no-cors",
+         headers:{
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+        }
+    })
+    if (res.ok === true) {
+        window.location.href = res.url
+    }
 }
 
 async function addMessage(){

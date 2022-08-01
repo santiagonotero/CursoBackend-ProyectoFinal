@@ -80,24 +80,28 @@ module.exports ={
             }
         },
     endSelling: async(req, res) => {
-            const carrito = await Carrito.leerCarrito(req.user.email)
-            let listaArticulos = {...carrito}[0].productos     
-            let pedidoArticulos = []
-            let precioTotal = 0
-            let arrayCantidades = []
-            for(let i=0; i<listaArticulos.length; i++) {
-                const detalleProducto = {...await Productos.leerProducto(listaArticulos[i].item)}
-                pedidoArticulos.push({nombre: detalleProducto[0].nombre, precio: detalleProducto[0].precio * listaArticulos[i].cantidad, cantidad: listaArticulos[i].cantidad, codigo: detalleProducto[0].codigo})
-                precioTotal +=JSON.parse(pedidoArticulos[i].precio)
-                arrayCantidades.push(listaArticulos[i].cantidad)
-            } 
-            const usuario =req.user
-            MailSender.nuevaCompra(usuario, pedidoArticulos, precioTotal, arrayCantidades)
-            await Carrito.vaciarCarrito(req.user.email)
-            res.redirect('/compraterminada')
+            try{
+                const carrito = await Carrito.leerCarrito(req.user.email)
+                let listaArticulos = {...carrito}[0].productos     
+                let pedidoArticulos = []
+                let precioTotal = 0
+                let arrayCantidades = []
+                for(let i=0; i<listaArticulos.length; i++) {
+                    const detalleProducto = {...await Productos.leerProducto(listaArticulos[i].item)}
+                    pedidoArticulos.push({nombre: detalleProducto[0].nombre, precio: detalleProducto[0].precio * listaArticulos[i].cantidad, cantidad: listaArticulos[i].cantidad, codigo: detalleProducto[0].codigo})
+                    precioTotal +=JSON.parse(pedidoArticulos[i].precio)
+                    arrayCantidades.push(listaArticulos[i].cantidad)
+                } 
+                const usuario =req.user
+                MailSender.nuevaCompra(usuario, pedidoArticulos, precioTotal, arrayCantidades)
+                await Carrito.vaciarCarrito(req.user.email)
+                res.send('Ok').status(200)
+            }
+            catch(err){
+                logger.error(err)
+            }
         },
     getEndSelling: (req, res) => {
-            console.log('Redirigiendo a la página de compra confirmada')
             res.render('cartok', {layout:'cartok'})
     }
 }

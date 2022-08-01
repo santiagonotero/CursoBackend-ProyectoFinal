@@ -27,7 +27,6 @@ async function getUserEmail(){
 
     const query = await fetch('/api/currentuser')
     const response = await query.json()
-    console.log(response)
     return response.email
 }
 

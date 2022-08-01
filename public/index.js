@@ -15,7 +15,6 @@ function pintarProductos(plantilla, datos){
     let copiaPlantilla = plantilla
     let compiler = Handlebars.compile(copiaPlantilla)
     let result = compiler({datos})
-    console.log(result)
     let listado=document.getElementById("listadoProductos")
     listado.innerHTML = result
 }
@@ -26,7 +25,6 @@ function cambiarCategoria(valor){
                                                 'Accept': 'application/json'}})
         .then(respuesta => respuesta.json())
         .then(inventario => {
-            //pintarProductos(plantillaProductos, inventario)
             let plantilla= plantillaProductos
             let compiler = Handlebars.compile(plantilla)
             let result = compiler({inventario})
@@ -37,8 +35,6 @@ function cambiarCategoria(valor){
 }
 
 socket.on('server:productList', (inventario)=>{
-    //pintarProductos(plantillaProductos, inventario)
-    // console.log('Usando socket.on')
     let plantilla=plantillaProductos
     let compiler = Handlebars.compile(plantilla)
     let result = compiler(...inventario)
